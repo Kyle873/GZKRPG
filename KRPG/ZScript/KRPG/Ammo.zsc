@@ -1,0 +1,77 @@
+class KPistolAmmo : Ammo
+{
+	default
+	{
+		//$Category "KRPG/Ammo"
+
+		Tag "Pistol Ammo";
+
+		Inventory.PickupMessage "Picked up some pistol ammo.";
+		Inventory.PickupSound "pickup/ammo";
+		Inventory.Amount 10;
+		Inventory.MaxAmount 200;
+		Inventory.Icon "PAMOA0";
+
+		Ammo.BackpackAmount 10;
+		Ammo.BackpackMaxAmount 400;
+	}
+
+	states
+	{
+		Spawn:
+			PAMO A -1;
+			Stop;
+	}
+}
+
+class KRevolverAmmo : Ammo
+{
+	default
+	{
+		//$Category "KRPG/Ammo"
+		
+		Tag "Revolver Ammo";
+
+		Inventory.PickupMessage "Picked up some revolver ammo.";
+		Inventory.PickupSound "pickup/ammo";
+		Inventory.Amount 6;
+		Inventory.MaxAmount 30;
+		Inventory.Icon "RAMOA0";
+
+		Ammo.BackpackAmount 6;
+		Ammo.BackpackMaxAmount 60;
+	}
+
+	states
+	{
+		Spawn:
+			RAMO A -1;
+			Stop;
+	}
+}
+
+class KShotgunAmmo : Ammo
+{
+	default
+	{
+		//$Category "KRPG/Ammo"
+
+		Tag "Shotgun Ammo";
+
+		Inventory.PickupMessage "Picked up some shotgun ammo.";
+		Inventory.PickupSound "pickup/ammo";
+		Inventory.Amount 5;
+		Inventory.MaxAmount 50;
+		Inventory.Icon "SAMOA0";
+
+		Ammo.BackpackAmount 5;
+		Ammo.BackpackMaxAmount 100;
+	}
+
+	states
+	{
+		Spawn:
+			SAMO A -1;
+			Stop;
+	}
+}

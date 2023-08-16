@@ -1,0 +1,454 @@
+enum WeaponUpgrade
+{
+    WU_DAMAGE,
+    WU_ROF,
+    WU_ACCURACY,
+    WU_RELOAD,
+    WU_CLIPSIZE,
+    WU_CLIPUSE,
+    WU_PELLET
+}
+
+enum DamageType
+{
+    DT_NORMAL,
+    DT_FIRE,
+    DT_ICE,
+    DT_ELECTRIC,
+    DT_POISON,
+    DT_VOID,
+    
+    DT_MAX
+}
+
+class KWeapon : Weapon
+{
+    static const string UpgradeTypes[] =
+    {
+        "KDamageUpgrade",
+        "KROFUpgrade",
+        "KAccuracyUpgrade",
+        "KReloadUpgrade",
+        "KClipSizeUpgrade",
+        "KClipUseUpgrade",
+        "KPelletUpgrade"
+    };
+
+    static const string UpgradeColors[] =
+    {
+        "Red",
+        "Orange",
+        "Yellow",
+        "Green",
+        "Cyan",
+        "Blue",
+        "Brick"
+    };
+
+    const UpgradeMax = 5;
+    
+    int Type;
+    int DamageUpgrade;
+    int DamageUpgradeMax;
+    int ROFUpgrade;
+    int ROFUpgradeMax;
+    int AccuracyUpgrade;
+    int AccuracyUpgradeMax;
+    int ReloadUpgrade;
+    int ReloadUpgradeMax;
+    int ClipSizeUpgrade;
+    int ClipSizeUpgradeMax;
+    int ClipUseUpgrade;
+    int ClipUseUpgradeMax;
+    int PelletUpgrade;
+    int PelletUpgradeMax;
+
+    int Clip[DT_MAX];
+    int ClipSize;
+    int ClipUse;
+
+    string PuffType;
+    
+    property Type : Type;
+    property DamageUpgradeMax : DamageUpgradeMax;
+    property ROFUpgradeMax : ROFUpgradeMax;
+    property AccuracyUpgradeMax : AccuracyUpgradeMax;
+    property ReloadUpgradeMax : ReloadUpgradeMax;
+    property ClipSizeUpgradeMax : ClipSizeUpgradeMax;
+    property ClipUseUpgradeMax : ClipUseUpgradeMax;
+    property PelletUpgradeMax : PelletUpgradeMax;
+
+    property Clip : Clip;
+    property ClipSize : ClipSize;
+    property ClipUse : ClipUse;
+
+    property PuffType : PuffType;
+
+    default
+    {
+        Weapon.BobStyle "Alpha";
+        Weapon.BobSpeed 2.5;
+        Weapon.BobRangeX 0.2;
+        Weapon.BobRangeY 0.5;
+        
+        KWeapon.DamageUpgradeMax UpgradeMax;
+        KWeapon.ROFUpgradeMax UpgradeMax;
+        KWeapon.AccuracyUpgradeMax UpgradeMax;
+        KWeapon.ReloadUpgradeMax UpgradeMax;
+        KWeapon.ClipSizeUpgradeMax UpgradeMax;
+        KWeapon.ClipUseUpgradeMax UpgradeMax;
+        KWeapon.PelletUpgradeMax UpgradeMax;
+        KWeapon.ClipUse 1;
+    }
+
+    override void PostBeginPlay()
+    {
+        super.PostBeginPlay();
+
+        Type = DT_NORMAL;
+        DamageUpgrade = 0;
+        ROFUpgrade = 0;
+        AccuracyUpgrade = 0;
+        ReloadUpgrade = 0;
+        ClipSizeUpgrade = 0;
+        ClipUseUpgrade = 0;
+        PelletUpgrade = 0;
+        
+        for (int i = 0; i < DT_MAX; i++)
+            Clip[i] = ClipSize;
+        
+		A_SetType(DT_NORMAL, false);
+    }
+
+    virtual bool UpgradeDamage()
+    {
+        if (DamageUpgrade + 1 > DamageUpgradeMax)
+            return false;
+
+        DamageUpgrade++;
+
+        return true;
+    }
+
+    virtual bool UpgradeROF()
+    {
+        if (ROFUpgrade + 1 > ROFUpgradeMax)
+            return false;
+
+        ROFUpgrade++;
+
+        return true;
+    }
+
+    virtual bool UpgradeAccuracy()
+    {
+        if (AccuracyUpgrade + 1 > AccuracyUpgradeMax)
+            return false;
+
+        AccuracyUpgrade++;
+
+        return true;
+    }
+
+    virtual bool UpgradeReload()
+    {
+        if (ReloadUpgrade + 1 > ReloadUpgradeMax)
+            return false;
+
+        ReloadUpgrade++;
+
+        return true;
+    }
+
+    virtual bool UpgradeClipSize()
+    {
+        if (ClipSizeUpgrade + 1 > ClipSizeUpgradeMax)
+            return false;
+
+        ClipSizeUpgrade++;
+
+        return true;
+    }
+
+    virtual bool UpgradeClipUse()
+    {
+        if (ClipUseUpgrade + 1 > ClipUseUpgradeMax)
+            return false;
+
+        ClipUseUpgrade++;
+
+        return true;
+    }
+
+    virtual bool UpgradePellet()
+    {
+        if (PelletUpgrade + 1 > PelletUpgradeMax)
+            return false;
+
+        PelletUpgrade++;
+
+        return true;
+    }
+    
+    action void A_SetType(int type, bool sound = true)
+    {
+        if (type == Invoker.Type)
+            return;
+        
+        string ammoType;
+        string puffType;
+        
+        switch (type)
+        {
+            case DT_NORMAL:
+                ammoType = "KWhiteEnergy";
+                PuffType = "KNormalPuff";
+                if (sound)
+                    A_StartSound("weapons/typeswitch/normal", CHAN_5);
+                break;
+            case DT_FIRE:
+                ammoType = "KOrangeEnergy";
+                PuffType = "KFirePuff";
+                if (sound)
+                    A_StartSound("weapons/typeswitch/fire", CHAN_5);
+                break;
+            case DT_ICE:
+                ammoType = "KBlueEnergy";
+                PuffType = "KIcePuff";
+                if (sound)
+                    A_StartSound("weapons/typeswitch/ice", CHAN_5);
+                break;
+            case DT_ELECTRIC:
+                ammoType = "KYellowEnergy";
+                PuffType = "KElectricPuff";
+                if (sound)
+                    A_StartSound("weapons/typeswitch/electric", CHAN_5);
+                break;
+            case DT_POISON:
+                ammoType = "KGreenEnergy";
+                PuffType = "KPoisonPuff";
+                if (sound)
+                    A_StartSound("weapons/typeswitch/poison", CHAN_5);
+                break;
+            case DT_VOID:
+                ammoType = "KPurpleEnergy";
+                PuffType = "KVoidPuff";
+                if (sound)
+                    A_StartSound("weapons/typeswitch/void", CHAN_5);
+                break;
+        }
+        
+        Invoker.Type = type;
+        Invoker.Ammo1 = Ammo(FindInventory(ammoType));
+        Invoker.AmmoType1 = ammoType;
+        Invoker.PuffType = puffType;
+    }
+    
+    action void A_UseBullet()
+    {
+        if (PlayerPawn(self).GetEffectTicsForItem("KInfiniteAmmoArtifact") > 0)
+            return;
+        
+        Invoker.Clip[Invoker.Type] -= Invoker.ClipUse;
+    }
+
+    action bool A_Empty()
+    {
+        return Invoker.Clip[Invoker.Type] <= 0;
+    }
+
+    action bool A_NeedsReload()
+    {
+        return Invoker.Clip[Invoker.Type] - (Invoker.ClipUse - 1) <= 0;
+    }
+
+    action bool A_CheckAbortReload()
+    {
+        return Invoker.Clip[Invoker.Type] >= Invoker.ClipSize || CountInv(Invoker.AmmoType1) <= 0;
+    }
+
+    action bool A_Reload()
+    {
+        if (Invoker.Clip[Invoker.Type] < Invoker.ClipSize)
+        {
+            while (Invoker.Clip[Invoker.Type] < Invoker.ClipSize && CountInv(Invoker.AmmoType1) > 0)
+            {
+                Invoker.Clip[Invoker.Type]++;
+                TakeInventory(Invoker.AmmoType1, 1);
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+}
+
+class KPistol : KWeapon
+{
+    default
+    {
+        Tag "Pistol";
+
+        Weapon.SlotNumber 2;
+
+        KWeapon.ClipUseUpgradeMax 0;
+        KWeapon.ClipSize 15;
+    }
+
+    override void PostBeginPlay()
+    {
+        super.PostBeginPlay();
+    }
+    
+    override bool UpgradeClipSize()
+    {
+        if (!super.UpgradeClipSize())
+            return false;
+
+        if (ClipSizeUpgrade == UpgradeMax)
+            ClipSize += 2;
+        else
+            ClipSize++;
+
+        return true;
+    }
+
+    states
+    {
+        Spawn:
+            NPIS X -1;
+            stop;
+        Ready:
+            NPIS A 1 A_WeaponReady(WRF_ALLOWRELOAD | WRF_ALLOWUSER1 | WRF_ALLOWUSER2 | WRF_ALLOWUSER3 | WRF_ALLOWUSER4);
+            loop;
+        Deselect:
+            NPIS A 1 A_Lower;
+            loop;
+        Select:
+            NPIS A 1 A_Raise;
+            loop;
+        Fire:
+            PISG A 0 A_JumpIf(A_Empty(), "Ready");
+            NPIS A 0 A_SetTics(5 - Invoker.ROFUpgrade);
+            NPIS B 4
+            {
+                A_FireBullets(5 - Invoker.AccuracyUpgrade, 0, 1 + Invoker.PelletUpgrade, 5 + (Invoker.DamageUpgrade * 5), Invoker.PuffType, FBF_NORANDOM);
+                A_StartSound("weapons/fire/pistol", CHAN_WEAPON);
+                A_GunFlash();
+                A_UseBullet();
+            }
+            NPIS CD 4;
+            NPIS C 4 A_ReFire;
+            goto Ready;
+        Reload:
+            NPIS A 0 A_JumpIf(A_CheckAbortReload(), "Ready");
+            NPIS A 4;
+            NPIS A 0 A_StartSound("weapons/reload/generic", CHAN_WEAPON);
+            NPIS AAAAAAAAAA 1 A_Lower;
+            NPIS A 0
+            {
+                A_SetTics(10 - (Invoker.ReloadUpgrade * 2));
+                A_Reload();
+            }
+            NPIS AAAAAAAAAA 1 A_Raise;
+            goto Ready;
+        Flash:
+            NPIS B 4 Bright A_Light1();
+            goto LightDone;
+		/*
+        User1:
+            TNT1 A 0 A_SetType(DT_FIRE);
+            goto Ready;
+        User2:
+            TNT1 A 0 A_SetType(DT_ICE);
+            goto Ready;
+        User3:
+            TNT1 A 0 A_SetType(DT_ELECTRIC);
+            goto Ready;
+        User4:
+            TNT1 A 0 A_SetType(DT_POISON);
+            goto Ready;
+		*/
+    }
+}
+
+class KRevolver : KWeapon
+{
+    default
+    {
+        Tag "Revolver";
+		Scale 0.75;
+
+        Weapon.SlotNumber 2;
+
+        KWeapon.ClipUseUpgradeMax 0;
+        KWeapon.ClipSize 6;
+    }
+
+    override void PostBeginPlay()
+    {
+        super.PostBeginPlay();
+    }
+    
+    override bool UpgradeClipSize()
+    {
+        if (!super.UpgradeClipSize())
+            return false;
+
+		ClipSize++;
+
+        return true;
+    }
+
+    states
+    {
+        Spawn:
+            REVO X -1;
+            stop;
+        Ready:
+            REVO A 1 A_WeaponReady(WRF_ALLOWRELOAD | WRF_ALLOWUSER1 | WRF_ALLOWUSER2 | WRF_ALLOWUSER3 | WRF_ALLOWUSER4);
+            loop;
+        Deselect:
+            REVO A 1 A_Lower;
+            loop;
+        Select:
+            REVO A 1 A_Raise;
+            loop;
+        Fire:
+            REVO A 0 A_JumpIf(A_Empty(), "Ready");
+            REVO B 3
+			{
+				A_StartSound("weapons/fire/revolver", CHAN_WEAPON);
+				A_GunFlash();
+			}
+            REVO C 3
+            {
+                A_FireBullets(2 - (Invoker.AccuracyUpgrade * 0.4), 0, 1 + Invoker.PelletUpgrade, 20 + (Invoker.DamageUpgrade * 10), Invoker.PuffType, FBF_NORANDOM);
+                A_UseBullet();
+            }
+            REVO D 0 A_SetTics(6 - Invoker.ROFUpgrade);
+            REVO E 0 A_SetTics(6 - Invoker.ROFUpgrade);
+            REVO D 0 A_SetTics(6 - Invoker.ROFUpgrade);
+			REVO A 3;
+            REVO A 6 A_ReFire();
+            goto Ready;
+        Reload:
+            REVO A 0 A_JumpIf(A_CheckAbortReload(), "Ready");
+            REVO A 4;
+            REVO A 0;
+            REVO AAAAAAAAAAAAAA 1 A_Lower;
+            REVO A 0
+            {
+				A_StartSound("weapons/reload/revolver", CHAN_WEAPON);
+                A_SetTics(50 - (Invoker.ReloadUpgrade * 5));
+                A_Reload();
+            }
+            REVO AAAAAAAAAAAAAA 1 A_Raise;
+            goto Ready;
+        Flash:
+            REVO B 3 Bright A_Light1();
+            REVO C 3 Bright A_Light2();
+            goto LightDone;
+    }
+}

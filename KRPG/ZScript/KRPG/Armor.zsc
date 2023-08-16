@@ -1,0 +1,144 @@
+class KArmor : Inventory
+{
+    string Type;
+    double Resistance;
+
+    property Type : Type;
+    property Resistance : Resistance;
+
+    default
+    {
+		//$Category "KRPG/Armor"
+        
+		Tag "Basic Armor";
+
+        Inventory.PickupMessage "Picked up some Basic Armor.";
+        Inventory.PickupSound "items/armor/get";
+        Inventory.UseSound "items/armor/use";
+        Inventory.DefMaxAmount;
+
+        KArmor.Type "Normal";
+        KArmor.Resistance 0.5;
+
+        +Inventory.InvBar;
+    }
+
+    override bool Use(bool pickup)
+    {
+        KPlayer(Owner).ApplyArmor(Type, Resistance);
+
+        return true;
+    }
+
+    states
+    {
+        Spawn:
+            ARMX A -1 bright;
+            Stop;
+    }
+}
+
+class KFireArmor : KArmor
+{
+    default
+    {
+		//$Category "KRPG/Armor"
+        
+        Tag "Fire Armor";
+
+        Inventory.PickupMessage "Picked up some Fire Armor.";
+
+        KArmor.Type "Fire";
+    }
+
+    states
+    {
+        Spawn:
+            ARMF A -1 bright;
+            stop;
+    }
+}
+
+class KIceArmor : KArmor
+{
+    default
+    {
+		//$Category "KRPG/Armor"
+        
+        Tag "Ice Armor";
+
+        Inventory.PickupMessage "Picked up some Ice Armor.";
+
+        KArmor.Type "Ice";
+    }
+
+    states
+    {
+        Spawn:
+            ARMI A -1 bright;
+            stop;
+    }
+}
+
+class KElectricArmor : KArmor
+{
+    default
+    {
+		//$Category "KRPG/Armor"
+        
+        Tag "Electric Armor";
+
+        Inventory.PickupMessage "Picked up some Electric Armor.";
+
+        KArmor.Type "Electric";
+    }
+
+    states
+    {
+        Spawn:
+            ARME A -1 bright;
+            stop;
+    }
+}
+
+class KPoisonArmor : KArmor
+{
+    default
+    {
+		//$Category "KRPG/Armor"
+        
+        Tag "Poison Armor";
+
+        Inventory.PickupMessage "Picked up some Poison Armor.";
+
+        KArmor.Type "Poison";
+    }
+
+    states
+    {
+        Spawn:
+            ARMP A -1 bright;
+            stop;
+    }
+}
+
+class KVoidArmor : KArmor
+{
+    default
+    {
+		//$Category "KRPG/Armor"
+        
+        Tag "Void Armor";
+
+        Inventory.PickupMessage "Picked up some Void Armor.";
+
+        KArmor.Type "Void";
+    }
+
+    states
+    {
+        Spawn:
+            ARMV A -1 bright;
+            stop;
+    }
+}

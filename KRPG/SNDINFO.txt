@@ -1,0 +1,67 @@
+// --------------------------------------------------------------------------------
+// Player
+
+player/fall PFall
+
+$playeralias player male *falling player/fall
+
+// --------------------------------------------------------------------------------
+// Items
+
+items/get          ItemGet
+items/energy/get   EnrgyGet
+items/health/get   HealGet
+items/health/use   HealUse
+items/armor/get    ArmGet
+items/armor/use    ArmUse
+items/artifact/get ArtiGet
+items/artifact/use ArtiUse
+items/score/get    ScoreGet
+items/upgrade/get  UpgrGet
+items/upgrade/use  UpgrUse
+items/key/get      KeyGet
+items/key/get2     KeyGet2
+
+// --------------------------------------------------------------------------------
+// Weapons
+
+weapons/fire/pistol			WFirePis
+weapons/fire/revolver		WFireRev
+weapons/reload/generic      WReldGen
+weapons/reload/revolver    	WReldRev
+weapons/typeswitch/normal   WTSNorm
+weapons/typeswitch/fire     WTSFire
+weapons/typeswitch/ice      WTSIce
+weapons/typeswitch/electric WTSElec
+weapons/typeswitch/poison   WTSPois
+weapons/typeswitch/void     WTSVoid
+
+// --------------------------------------------------------------------------------
+// Ambient
+
+ambient/horn AmbHorn
+
+$ambient 1 ambient/horn point continuous 1.0
+
+// --------------------------------------------------------------------------------
+// Oneshots
+
+oneshot/powerup     OSPwrUp
+oneshot/healstation OSHealSt
+
+// --------------------------------------------------------------------------------
+// Doors
+
+doors/ss2/open  Door1O
+doors/ss2/close Door1C
+
+// --------------------------------------------------------------------------------
+// Platforms
+
+platforms/ss2/start Plat1
+platforms/ss2/stop  Plat1S
+
+// --------------------------------------------------------------------------------
+// Terrain  
+
+terrain/water/splash SplashW

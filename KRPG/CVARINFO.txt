@@ -1,0 +1,1 @@
+user bool k_hud_show_energy_bars = true;

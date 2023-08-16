@@ -1,0 +1,11 @@
+#include "zcommon.acs"
+
+script "Test" (void)
+{
+    Print(s:"Test");
+	
+	GiveInventory("KRevolver", 1);
+	GiveInventory("KRevolverAmmo", 30);
+	GiveInventory("KShotgun", 1);
+	GiveInventory("KShotgunAmmo", 50);
+}

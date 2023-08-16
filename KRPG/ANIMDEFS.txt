@@ -1,0 +1,26 @@
+// --------------------------------------------------------------------------------
+// Liquids
+
+texture FBlack01 range FBlack04 tics 6
+texture Water01  range Water04  tics 6 // oscillate
+texture Aqua01   range Aqua04   tics 6
+texture Daqua01  range Daqua04  tics 6
+texture Gaqua01  range Gaqua04  tics 6
+texture Aqfall01 range Aqfall04 tics 3
+texture Dfall01  range Dfall04  tics 3
+texture Gfall01  range Gfall04  tics 3
+texture WFall01  range WFall04  tics 3
+texture BFall01  range BFall04  tics 3
+
+warp2 flat PurpleWa 2
+
+// --------------------------------------------------------------------------------
+// Puzzle Lines
+
+// texture HGridP2 range HGridP3 tics 8
+
+// --------------------------------------------------------------------------------
+// Switches
+
+// switch HGridBS1 on pic HGridBS2 tics 0 off pic HGridBS1 tics 0
+// switch Indswc1 on pic Indswc2 tics 0 off pic Indswc1 tics 0

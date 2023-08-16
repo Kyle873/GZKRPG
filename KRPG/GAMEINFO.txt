@@ -1,0 +1,2 @@
+StartupTitle = "KRPG"
+StartupColors = "00FF00", "000000"

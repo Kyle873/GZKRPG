@@ -1,0 +1,11 @@
+// --------------------------------------------------------------------------------
+// Holo Grid
+
+brightmap texture "Textures/Holo Grid/Blue.png"  { map "Brightmaps/Textures/Holo Grid/Brightmap.png" }
+
+// --------------------------------------------------------------------------------
+// Metal Colored
+
+brightmap texture "Textures/Metal Colored/Green.png"  { map "Brightmaps/Textures/Metal Colored/Brightmap.png" }
+brightmap texture "Textures/Metal Colored/Orange.png" { map "Brightmaps/Textures/Metal Colored/Brightmap.png" }
+brightmap texture "Textures/Metal Colored/Blue.png"   { map "Brightmaps/Textures/Metal Colored/Brightmap.png" }

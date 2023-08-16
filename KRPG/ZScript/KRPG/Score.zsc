@@ -1,0 +1,71 @@
+class KScoreItem : Inventory
+{
+    static const string Items[] =
+    {
+        "KMoneyBag",
+        "KLootChest"
+    };
+
+    int Score;
+
+    property Score : Score;
+
+    default
+    {
+        Inventory.PickupSound "items/score/get";
+        Inventory.MaxAmount 0x7FFFFFFF;
+
+        KScoreItem.Score 1;
+
+        +CountItem;
+        +Inventory.AlwaysPickup;
+    }
+
+    override bool TryPickup(in out Actor toucher)
+    {
+        if (!super.TryPickup(toucher))
+            return false;
+
+        toucher.Score += Score;
+
+        return true;
+    }
+}
+
+class KMoneyBag : KScoreItem
+{
+    default
+    {
+		//$Category "KRPG/Score"
+        
+		Inventory.PickupMessage "Picked up a bag of money.";
+
+        KScoreItem.Score 500;
+    }
+
+    states
+    {
+        Spawn:
+            SCR1 A -1;
+            Stop;
+    }
+}
+
+class KLootChest : KScoreItem
+{
+    default
+    {
+		//$Category "KRPG/Score"
+        
+        Inventory.PickupMessage "Picked up a chest of loot.";
+
+        KScoreItem.Score 1000;
+    }
+
+    states
+    {
+        Spawn:
+            SCR2 A -1;
+            Stop;
+    }
+}

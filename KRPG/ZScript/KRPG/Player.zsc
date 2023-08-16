@@ -1,0 +1,166 @@
+enum PlayerUpgrade
+{
+    PU_HEALTH,
+    PU_Energy
+}
+
+struct PlayerArmor
+{
+    name DamageType;
+    double Resistance;
+    int Current;
+    int Max;
+}
+
+class KPlayer : DoomPlayer
+{
+    static const name UpgradeTypes[] =
+    {
+        "KHealthUpgrade",
+        "KEnergyUpgrade"
+    };
+
+    const HealthUpgradeAmount = 100;
+    const EnergyUpgradeAmount = 50;
+
+    PlayerArmor Armor;
+
+    int HealthUpgrade;
+    int EnergyUpgrade;
+
+    default
+    {
+        Player.MugShotMaxHealth -1;
+
+        Player.DamageScreenColor "DarkGray", 1.0, "Melee";
+        Player.DamageScreenColor "Orange", 1.0, "Fire";
+        Player.DamageScreenColor "Blue", 1.0, "Ice";
+        Player.DamageScreenColor "Yellow", 1.0, "Electric";
+        Player.DamageScreenColor "Green", 1.0, "Poison";
+        Player.DamageScreenColor "Black", 1.0, "Void";
+        Player.DamageScreenColor "Blue", 1.0, "Drowning";
+        Player.DamageScreenColor "Brown", 1.0, "Slime";
+        Player.DamageScreenColor "White", 1.0, "Crush";
+        Player.DamageScreenColor "White", 1.0, "Falling";
+        Player.DamageScreenColor "Brown", 1.0, "Quake";
+
+        Player.StartItem "KPistol";
+        Player.StartItem "KRedEnergy", 30;
+        Player.StartItem "KOrangeEnergy", 30;
+        Player.StartItem "KYellowEnergy", 30;
+        Player.StartItem "KGreenEnergy", 30;
+        Player.StartItem "KBlueEnergy", 30;
+        Player.StartItem "KPurpleEnergy", 30;
+        Player.StartItem "KWhiteEnergy", 30;
+        Player.StartItem "Fist";
+        
+        +AimReflect;
+    }
+
+    override void PostBeginPlay()
+    {
+        super.PostBeginPlay();
+
+        HealthUpgrade = CountInv(UpgradeTypes[PU_HEALTH]);
+        EnergyUpgrade = CountInv(UpgradeTypes[PU_Energy]);
+    }
+
+    override void Tick()
+    {
+        super.Tick();
+        
+        if (Health <= 0)
+            return;
+        
+        FLineTraceData ltd;
+        
+        MaxHealth = GetMaxHealth();
+
+        for (int i = 0; i < Energy.Types.Size(); i++)
+        {
+            Ammo Energy = Ammo(FindInventory(Energy.Types[i]));
+
+            if (Energy)
+            {
+                Energy.MaxAmount = GetMaxEnergy();
+
+                if (Energy.Amount > Energy.MaxAmount)
+                    Energy.Amount = Energy.MaxAmount;
+            }
+        }
+        
+        LineTrace(Angle, 2048, Pitch, 0, Height / 2 + AttackZOffset * Player.CrouchFactor, 0, 0, ltd);
+        
+        Target = ltd.HitActor;
+    }
+
+    override int DamageMobj(Actor inflictor, Actor source, int damage, name mod, int flags, double angle)
+    {
+        if (Armor.Current > 0 && (Armor.DamageType == "Normal" || mod == "Melee" || mod == Armor.DamageType))
+        {
+            double amount = damage * Armor.Resistance;
+
+            if (Armor.Current >= amount)
+            {
+                Armor.Current -= amount;
+                damage -= amount;
+            }
+            else
+            {
+                damage -= amount - armor.Current;
+                Armor.Current = 0;
+            }
+        }
+
+        return super.DamageMobj(inflictor, source, damage, mod, flags, angle);
+    }
+
+    override int GetMaxHealth() const
+    {
+        return 100 + (HealthUpgrade * HealthUpgradeAmount);
+    }
+
+    int GetMaxEnergy() const
+    {
+        return 100 + (EnergyUpgrade * EnergyUpgradeAmount);
+    }
+    
+    ui bool HasTarget() const
+    {
+        return Target && Target.bIsMonster;
+    }
+    
+    void ApplyArmor(name type, double resist)
+    {
+        Armor.DamageType = type;
+        Armor.Resistance = resist;
+        Armor.Current = Armor.Max = GetMaxHealth();
+    }
+
+    states
+    {
+        Death.Poison:
+            TNT1 A 0
+            {
+                A_PlayerScream();
+                A_SetTranslation("GreenSaturation");
+            }
+            PLAY H 1
+            {
+                A_SetScale(Scale.X, Scale.Y - 0.01);
+                A_FadeOut(0.01, false);
+            }
+            goto Death.Poison+1;
+        Death.Void:
+            TNT1 A 0 A_SpawnItemEx("TeleportFog");
+            TNT1 A -1;
+            stop;
+        Death.Falling:
+            goto Super::XDeath;
+        Death.Crush:
+            goto Super::XDeath;
+        XDeath:
+            TNT1 A 0 A_SkullPop;
+            goto Super::XDeath;
+    }
+}

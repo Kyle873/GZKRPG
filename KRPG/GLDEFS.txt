@@ -1,0 +1,123 @@
+#include "Brightmaps/Textures.txt"
+
+// --------------------------------------------------------------------------------
+// Glows
+
+glow
+{
+}
+
+// --------------------------------------------------------------------------------
+// Monsters
+
+pointlight RedZombie
+{
+    Color 1 0 0
+    Size 64
+}
+
+object KZombieTest { frame POSS { light RedZombie } }
+
+// --------------------------------------------------------------------------------
+// Upgrades
+
+pointlight HealthUpgrade
+{
+    Color 1 0 0
+    Size 8
+}
+
+pulselight EnergyUpgrade
+{
+    Color 1 0 0
+    Size 8
+    SecondarySize 12
+    Interval 5
+    Subtractive 1
+}
+
+object KHealthUpgrade { frame UPGH { light HealthUpgrade } }
+object KEnergyUpgrade { frame UPGM { light EnergyUpgrade } }
+
+// --------------------------------------------------------------------------------
+// Health
+
+pointlight TinyHealth
+{
+    Color 1 0 0
+    Size 24
+    Offset 0 24 0
+}
+
+pointlight SmallHealth
+{
+    Color 0 1 0
+    Size 24
+    Offset 0 24 0
+}
+
+pointlight MediumHealth
+{
+    Color 0 0 1
+    Size 24
+    Offset 0 24 0
+}
+
+pointlight LargeHealth
+{
+    Color 1 0.85 0
+    Size 24
+    Offset 0 24 0
+}
+
+object KTinyHealth   { frame VIALA { light TinyHealth } }
+object KSmallHealth  { frame VIALB { light SmallHealth } }
+object KMediumHealth { frame VIALC { light MediumHealth } }
+object KLargeHealth  { frame VIALD { light LargeHealth } }
+
+// --------------------------------------------------------------------------------
+// Armor
+
+pointlight Armor
+{
+    Color 1 1 1
+    Size 24
+}
+
+pointlight FireArmor
+{
+    Color 1 0.5 1
+    Size 24
+}
+
+pointlight IceArmor
+{
+    Color 0 0 1
+    Size 24
+}
+
+pointlight ElectricArmor
+{
+    Color 1 1 0
+    Size 24
+}
+
+pointlight PoisonArmor
+{
+    Color 0 1 0
+    Size 24
+}
+
+pointlight VoidArmor
+{
+    Color 1 1 1
+    Size 24
+    Subtractive 1
+}
+
+object KArmor         { frame ARMX { light Armor } }
+object KFireArmor     { frame ARMF { light FireArmor } }
+object KIceArmor      { frame ARMI { light IceArmor } }
+object KElectricArmor { frame ARME { light ElectricArmor } }
+object KPoisonArmor   { frame ARMP { light PoisonArmor } }
+object KVoidArmor     { frame ARMV { light VoidArmor } }

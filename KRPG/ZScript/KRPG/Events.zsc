@@ -1,0 +1,145 @@
+class KTestHandler : StaticEventHandler
+{
+    override void NetworkProcess(ConsoleEvent e)
+    {
+        int playerNum = e.Args[0];
+
+        switch (Name(e.Name))
+        {
+            case 'addscore':
+                Players[playerNum].MO.Score += e.Args[1];
+                break;
+
+            case 'upgradegun':
+            {
+                KWeapon weapon = KWeapon(Players[PlayerNum].ReadyWeapon);
+
+                for (int i = 0; i < weapon.DamageUpgradeMax; i++)
+                    weapon.UpgradeDamage();
+                for (int i = 0; i < weapon.ROFUpgradeMax; i++)
+                    weapon.UpgradeROF();
+                for (int i = 0; i < weapon.AccuracyUpgradeMax; i++)
+                    weapon.UpgradeAccuracy();
+                for (int i = 0; i < weapon.ReloadUpgradeMax; i++)
+                    weapon.UpgradeReload();
+                for (int i = 0; i < weapon.ClipSizeUpgradeMax; i++)
+                    weapon.UpgradeClipSize();
+                for (int i = 0; i < weapon.ClipUseUpgradeMax; i++)
+                    weapon.UpgradeClipUse();
+                for (int i = 0; i < weapon.PelletUpgradeMax; i++)
+                    weapon.UpgradePellet();
+
+                break;
+            }
+
+            case 'collectloot':
+            {
+                Actor player = Players[PlayerNum].MO;
+                ThinkerIterator it = ThinkerIterator.Create();
+
+                for (Actor mo; mo = Actor(it.Next());)
+                    if (Type.IsSubclass(mo.GetClassName(), "Inventory"))
+                        mo.SetOrigin(player.Pos, false);
+
+                player.Vel.X += 0.01;
+
+                break;
+            }
+        }
+    }
+}
+
+class KScoreHandler : StaticEventHandler
+{
+    override void WorldThingDamaged(WorldEvent e)
+    {
+        if (e.Thing.Health <= 0 && e.DamageSource != null)
+            AddScore(e.Thing, e.DamageSource);
+    }
+
+    void AddScore(Actor target, Actor source)
+    {
+        switch (target.GetClassName())
+        {
+            case 'KZombieTest': source.Score += 100; break;
+        }
+    }
+}
+
+class KPlayerDeathHandler : StaticEventHandler
+{
+    const ThrowForce = 8;
+
+    override void WorldThingDied(WorldEvent e)
+    {
+        super.WorldThingDied(e);
+
+        if (!(e.Thing is "KPlayer"))
+            return;
+
+        KPlayer player = KPlayer(e.Thing);
+
+        for (int i = 0; i < KScoreItem.Items.Size(); i++)
+        {
+            int amount = player.CountInv(KScoreItem.Items[i]);
+
+            for (int j = 0; j < amount; j++)
+            {
+                Actor item = Actor.Spawn(KScoreItem.Items[i], (player.Pos.X, player.Pos.Y, player.Pos.Z + player.Height / 2));
+
+                item.Vel.X = Random(-ThrowForce, ThrowForce);
+                item.Vel.Y = Random(-ThrowForce, ThrowForce);
+                item.Vel.Z = Random(ThrowForce / 2, ThrowForce * 2);
+            }
+
+            player.TakeInventory(KScoreItem.Items[i], amount);
+        }
+    }
+}
+
+class KDamageNumberHandler : StaticEventHandler
+{
+    override void WorldThingDamaged(WorldEvent e)
+    {
+        if (!e.Thing.bIsMonster || e.Thing is "KPlayer")
+            return;
+        
+        int damage = Abs(e.Damage);
+        int digits = Floor(Log10(damage)) + 1;
+        
+        for (int i = 0; i < digits; i++)
+        {
+            KNumber digit = KNumber(Actor.Spawn("KNumber", e.Thing.Pos));
+            
+            digit.Height = e.Thing.Height;
+            digit.Position = e.Thing.Pos;
+            digit.Scale = e.Thing.Scale;
+            digit.Digit = GetDigit(damage, i);
+            digit.TotalDigits = digits;
+            digit.Offset = i;
+            
+            SetTranslation(digit, e.DamageType);
+        }
+    }
+    
+    int GetDigit(int value, int digit)
+    {
+        return (value / (10 ** digit)) % 10;
+    }
+    
+    void SetTranslation(Actor digit, name type)
+    {
+        switch (type)
+        {
+            case 'Melee':    digit.A_SetTranslation("GraySaturation");   break;
+            case 'Fire':     digit.A_SetTranslation("OrangeSaturation"); break;
+            case 'Ice':      digit.A_SetTranslation("CyanSaturation");   break;
+            case 'Electric': digit.A_SetTranslation("YellowSaturation"); break;
+            case 'Poison':   digit.A_SetTranslation("GreenSaturation");  break;
+            case 'Void':     digit.A_SetTranslation("PurpleSaturation"); break;
+            case 'Drowning': digit.A_SetTranslation("BlueSaturation");   break;
+            case 'Slime':
+            case 'Quake':    digit.A_SetTranslation("BrownSaturation");  break;
+        }
+    }
+}

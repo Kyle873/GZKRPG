@@ -1,0 +1,323 @@
+class KUpgrade : Inventory
+{
+    default
+    {
+        Inventory.PickupSound "items/upgrade/get";
+        Inventory.UseSound "items/upgrade/use";
+        Inventory.MaxAmount 0x7FFFFFFF;
+
+        +Inventory.InvBar;
+    }
+}
+
+class KHealthUpgrade : KUpgrade
+{
+    default
+    {
+		//$Category "KRPG/Upgrades"
+        
+        Tag "Health Upgrade";
+
+        Inventory.PickupMessage "Picked up a Health upgrade.";
+    }
+
+    override bool TryPickup(in out Actor toucher)
+    {
+        if (!super.TryPickup(toucher))
+            return false;
+
+        KPlayer(toucher).HealthUpgrade++;
+
+        return true;
+    }
+
+    override Inventory CreateTossable(int amt)
+    {
+        if (Amount >= -amt)
+        {
+            KPlayer player = KPlayer(Owner);
+
+            if (player.Health > player.MaxHealth - player.HealthUpgradeAmount)
+                player.DamageMobj(null, null, Abs(player.MaxHealth - player.HealthUpgradeAmount - player.Health), "None", DMG_FORCED);
+
+            player.HealthUpgrade += amt;
+        }
+
+        return super.CreateTossable(amt);
+    }
+
+    States
+    {
+        Spawn:
+            UPGH A -1;
+            stop;
+    }
+}
+
+class KEnergyUpgrade : KUpgrade
+{
+    default
+    {
+		//$Category "KRPG/Upgrades"
+        
+        Tag "Energy Upgrade";
+
+        Inventory.PickupMessage "Picked up an Energy upgrade.";
+    }
+
+    override bool TryPickup(in out Actor toucher)
+    {
+        if (!super.TryPickup(toucher))
+            return false;
+
+        KPlayer(toucher).EnergyUpgrade++;
+
+        return true;
+    }
+
+    override Inventory CreateTossable(int amt)
+    {
+        if (Amount >= -amt)
+            KPlayer(Owner).EnergyUpgrade += amt;
+
+        return super.CreateTossable(amt);
+    }
+
+    States
+    {
+        Spawn:
+            UPGE A -1 Bright;
+            stop;
+    }
+}
+
+class KDamageUpgrade : KUpgrade
+{
+    default
+    {
+		//$Category "KRPG/Upgrades"
+        
+        Tag "Damage Upgrade";
+        RenderStyle "Add";
+
+        Inventory.PickupMessage "Picked up a Damage upgrade.";
+
+        +FloatBob;
+    }
+
+    override bool Use(bool pickup)
+    {
+        KWeapon weapon = KWeapon(KPlayer(Owner).Player.ReadyWeapon);
+
+        if (weapon is "KWeapon")
+            if (weapon.UpgradeDamage())
+                return !super.Use(pickup);
+
+        return false;
+    }
+
+    States
+    {
+        Spawn:
+            UPGG A -1 Bright;
+            stop;
+    }
+}
+
+class KROFUpgrade : KUpgrade
+{
+    default
+    {
+		//$Category "KRPG/Upgrades"
+        
+        Tag "Rate of Fire Upgrade";
+        RenderStyle "Add";
+
+        Inventory.PickupMessage "Picked up a Rate of Fire upgrade.";
+
+        +FloatBob;
+    }
+
+    override bool Use(bool pickup)
+    {
+        KWeapon weapon = KWeapon(KPlayer(Owner).Player.ReadyWeapon);
+
+        if (weapon is "KWeapon")
+            if (weapon.UpgradeROF())
+                return !super.Use(pickup);
+
+        return false;
+    }
+
+    States
+    {
+        Spawn:
+            UPGG B -1 Bright;
+            stop;
+    }
+}
+
+class KAccuracyUpgrade : KUpgrade
+{
+    default
+    {
+		//$Category "KRPG/Upgrades"
+        
+        Tag "Accuracy Upgrade";
+        RenderStyle "Add";
+
+        Inventory.PickupMessage "Picked up an Accuracy upgrade.";
+
+        +FloatBob;
+    }
+
+    override bool Use(bool pickup)
+    {
+        KWeapon weapon = KWeapon(KPlayer(Owner).Player.ReadyWeapon);
+
+        if (weapon is "KWeapon")
+            if (weapon.UpgradeAccuracy())
+                return !super.Use(pickup);
+
+        return false;
+    }
+
+    States
+    {
+        Spawn:
+            UPGG C -1 Bright;
+            stop;
+    }
+}
+
+class KReloadUpgrade : KUpgrade
+{
+    default
+    {
+		//$Category "KRPG/Upgrades"
+        
+        Tag "Reload Upgrade";
+        RenderStyle "Add";
+
+        Inventory.PickupMessage "Picked up a Reload upgrade.";
+
+        +FloatBob;
+    }
+
+    override bool Use(bool pickup)
+    {
+        KWeapon weapon = KWeapon(KPlayer(Owner).Player.ReadyWeapon);
+
+        if (weapon is "KWeapon")
+            if (weapon.UpgradeReload())
+                return !super.Use(pickup);
+
+        return false;
+    }
+
+    States
+    {
+        Spawn:
+            UPGG D -1 Bright;
+            stop;
+    }
+}
+
+class KClipSizeUpgrade : KUpgrade
+{
+    default
+    {
+		//$Category "KRPG/Upgrades"
+        
+        Tag "Clip Size Upgrade";
+        RenderStyle "Add";
+
+        Inventory.PickupMessage "Picked up a Clip Size upgrade.";
+
+        +FloatBob;
+    }
+
+    override bool Use(bool pickup)
+    {
+        KWeapon weapon = KWeapon(KPlayer(Owner).Player.ReadyWeapon);
+
+        if (weapon is "KWeapon")
+            if (weapon.UpgradeClipSize())
+                return !super.Use(pickup);
+
+        return false;
+    }
+
+    States
+    {
+        Spawn:
+            UPGG E -1 Bright;
+            stop;
+    }
+}
+
+class KClipUseUpgrade : KUpgrade
+{
+    default
+    {
+		//$Category "KRPG/Upgrades"
+        
+        Tag "Clip Use Upgrade";
+        RenderStyle "Add";
+
+        Inventory.PickupMessage "Picked up a Clip Use upgrade.";
+
+        +FloatBob;
+    }
+
+    override bool Use(bool pickup)
+    {
+        KWeapon weapon = KWeapon(KPlayer(Owner).Player.ReadyWeapon);
+
+        if (weapon is "KWeapon")
+            if (weapon.UpgradeClipUse())
+                return !super.Use(pickup);
+
+        return false;
+    }
+
+    States
+    {
+        Spawn:
+            UPGG F -1 Bright;
+            stop;
+    }
+}
+
+class KPelletUpgrade : KUpgrade
+{
+    default
+    {
+		//$Category "KRPG/Upgrades"
+        
+        Tag "Pellet Upgrade";
+        RenderStyle "Add";
+
+        Inventory.PickupMessage "Picked up a Pellet upgrade.";
+
+        +FloatBob;
+    }
+
+    override bool Use(bool pickup)
+    {
+        KWeapon weapon = KWeapon(KPlayer(Owner).Player.ReadyWeapon);
+
+        if (weapon is "KWeapon")
+            if (weapon.UpgradePellet())
+                return !super.Use(pickup);
+
+        return false;
+    }
+
+    States
+    {
+        Spawn:
+            UPGG G -1 Bright;
+            stop;
+    }
+}

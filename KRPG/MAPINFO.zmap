@@ -1,0 +1,157 @@
+GameInfo
+{
+    TitleMusic = "Title"
+
+	SkyFlatName = "SKY"
+    DimAmount = 0
+    PickupColor = "White" // "D6 BA 45"
+    DefInventoryMaxAmount = 20
+    DefaultDropStyle = 2
+
+	MenuFontColor_Title = "Green"
+    MenuFontColor_Label = "Red"
+    MenuFontColor_Value = "White"
+    MenuFontColor_Action = "White"
+    MenuFontColor_Header = "White"
+    MenuFontColor_Highlight = "Green"
+    MenuFontColor_Selection = "Green"
+
+	PlayerClasses = "KPlayer"
+	StatusBarClass = "KStatusBar"
+    AddEventHandlers = "KTestHandler",
+                       "KScoreHandler",
+                       "KDamageNumberHandler",
+                       "KPlayerDeathHandler"
+}
+
+DoomEdNums
+{
+    // Weapons
+    20001 = KPistol
+    20002 = KRevolver
+    // 20003 = KShotgun
+
+    // Energy & Ammo
+    20100 = KRedEnergy
+    20101 = KOrangeEnergy
+    20102 = KYellowEnergy
+    20103 = KGreenEnergy
+    20104 = KBlueEnergy
+    20105 = KPurpleEnergy
+    20106 = KWhiteEnergy
+    20111 = KPistolAmmo
+    20112 = KRevolverAmmo
+
+    // Health & Armor
+    20200 = KTinyHealth
+    20201 = KSmallHealth
+    20202 = KMediumHealth
+    20203 = KLargeHealth
+    20204 = KArmor
+    20205 = KFireArmor
+    20206 = KIceArmor
+    20207 = KElectricArmor
+    20208 = KPoisonArmor
+    20209 = KVoidArmor
+
+    // Artifacts
+    20300 = KBuddhaArtifact
+    20301 = KDamageArtifact
+    20302 = KFireSpeedArtifact
+    20303 = KDrainArtifact
+    20304 = KFlightArtifact
+    20305 = KFrightArtifact
+    20306 = KHighJumpArtifact
+    20307 = KInfiniteAmmoArtifact
+    20308 = KInvisibilityArtifact
+    20309 = KInvulnerabilityArtifact
+    20310 = KIronFeetArtifact
+    20311 = KLightArtifact
+    20312 = KTorchArtifact
+    20313 = KProtectionArtifact
+    20314 = KReflectionArtifact
+    20315 = KRegenerationArtifact
+    20316 = KSpeedArtifact
+    20317 = KStrengthArtifact
+    20318 = KTimeArtifact
+
+    // Score Items
+    20400 = KMoneyBag
+    20401 = KLootChest
+
+    // Upgrades
+    20500 = KHealthUpgrade
+    20501 = KEnergyUpgrade
+    20502 = KDamageUpgrade
+    20503 = KROFUpgrade
+    20504 = KAccuracyUpgrade
+    20505 = KReloadUpgrade
+    20506 = KClipSizeUpgrade
+    20507 = KClipUseUpgrade
+    20508 = KPelletUpgrade
+	
+	/* Props - Winter
+	22000 = Icicle01
+	22001 = Icicle02
+	22002 = Icicle03
+	22003 = Icicle04
+	22004 = Icicle05
+	22005 = Icicle06
+	22006 = Icicle07
+	22007 = Tree01
+	22008 = Tree02
+	22009 = Tree03
+	22010 = Tree04
+	22011 = Tree05
+	22012 = Tree06
+	*/
+	
+	// Enemies
+	24001 = KZombieTest
+	
+	// Spawners
+	25001 = KHealthSpawner
+	25002 = KEnergySpawner
+	25003 = KArmorSpawner
+	25004 = KArtifactSpawner
+	25005 = KUpgradeSpawner
+}
+
+damagetype Void
+{
+}
+
+ClearSkills
+
+Skill "Normal"
+{
+    Name = "Normal"
+    SpawnFilter = "Nightmare"
+
+    DefaultSkill
+    AutoUseHealth
+}
+
+Map Test "Test Map"
+{
+    Music = "Mission1"
+    Sky1 = "Sky1"
+    
+	FallingDamage
+}
+
+map BMTest "BM Test Map"
+{
+    Music = "Test"
+    Sky1 = "Sky1"
+
+    FallingDamage
+    AllowRespawn
+}
+
+Map MISS01 "Mission 1"
+{
+    Music = "Mission1"
+    
+	FallingDamage
+}

@@ -1,0 +1,433 @@
+struct WeaponInfo
+{
+    KWeapon Weapon;
+    Inventory Ammo1;
+    Inventory Ammo2;
+    int Amount1;
+    int Amount2;
+    int Clip;
+}
+
+class PowerEntry
+{
+    int Timer;
+    bool ShowTimer;
+    string Icon;
+    string Color;
+    Vector2 Offset;
+    Vector2 Scale;
+
+    static PowerEntry Create(int timer, string icon, string color, Vector2 offset, Vector2 scale, bool showTimer)
+    {
+        PowerEntry entry = new("PowerEntry");
+
+        entry.Timer = timer;
+        entry.ShowTimer = showTimer;
+        entry.Icon = icon;
+        entry.Color = color;
+        entry.Offset = offset;
+        entry.Scale = scale;
+
+        return entry;
+    }
+}
+
+class UpgradeEntry
+{
+    int Current;
+    int Max;
+    string Color;
+
+    static UpgradeEntry Create(int current, int max, string color)
+    {
+        UpgradeEntry entry = new("UpgradeEntry");
+
+        entry.Current = current;
+        entry.Max = max;
+        entry.Color = color;
+
+        return entry;
+    }
+
+    bool IsActive() const
+    {
+        return Current > 0;
+    }
+}
+
+class KStatusBar : BaseStatusBar
+{
+    const LeftYBase = -18;
+    const RightYBase = -18;
+    const LeftOffset = 14;
+    const RightOffset = 14;
+    const PowerOffset = 24;
+
+    KPlayer Player;
+    WeaponInfo CurrentWeapon;
+
+    HUDFont BigFont;
+    HUDFont SmallFont;
+
+    InventoryBarState InvBar;
+
+    DynamicValueInterpolator HealthInterp;
+    DynamicValueInterpolator ArmorInterp;
+    DynamicValueInterpolator ScoreInterp;
+    DynamicValueInterpolator ClipInterp;
+    DynamicValueInterpolator AmmoInterp;
+    DynamicValueInterpolator TargetInterp;
+
+    int LeftY;
+    int RightY;
+
+    override void Init()
+    {
+        super.Init();
+
+        Font fnt;
+
+        SetSize(0, 320, 240);
+
+        fnt = "BIGFONT";
+        BigFont = HUDFont.Create(fnt, fnt.GetCharWidth("0"), true, 4, 1);
+
+        fnt = "SMALLFONT";
+        SmallFont = HUDFont.Create(fnt, 0, false, 4, 1);
+
+        InvBar = InventoryBarState.Create();
+
+        HealthInterp = DynamicValueInterpolator.Create(0, 0.25, 1, 100);
+        ArmorInterp = DynamicValueInterpolator.Create(0, 0.25, 1, 100);
+        ScoreInterp = DynamicValueInterpolator.Create(0, 0.1, 1, 10000);
+        ClipInterp = DynamicValueInterpolator.Create(0, 0.25, 1, 100);
+        AmmoInterp = DynamicValueInterpolator.Create(0, 0.25, 1, 100);
+        TargetInterp = DynamicValueInterpolator.Create(0, 0.25, 1, 100);
+    }
+
+    override void Tick()
+    {
+        super.Tick();
+
+        Player = KPlayer(CPlayer.MO);
+
+        GetCurrentWeapon();
+
+        if (!Player)
+            return;
+
+        HealthInterp.Update(Player.health > 0 ? Player.health : 0);
+        ArmorInterp.Update(Player.Armor.Current);
+        ScoreInterp.Update(Player.Score);
+        ClipInterp.Update(CurrentWeapon.Clip);
+        AmmoInterp.Update(CurrentWeapon.Amount1);
+        
+        if (Player.HasTarget())
+            TargetInterp.Update(Player.Target.Health);
+        else
+            TargetInterp.Update(0);
+    }
+
+    override void Draw(int state, double ticFrac)
+    {
+        super.Draw(state, ticFrac);
+
+        if (!(state == HUD_StatusBar || state == HUD_Fullscreen) || !Player)
+            return;
+
+        LeftY = LeftYBase;
+        RightY = RightYBase;
+
+        BeginHUD();
+
+        DrawStatus();
+        DrawScore();
+        DrawPowers();
+        DrawCorner();
+        if (CVar.FindCVar("k_hud_show_energy_bars").GetBool())
+            DrawNRGBars();
+        DrawInventory();
+        DrawTarget();
+    }
+    
+    // TODO: Keys, etc
+    override void DrawAutomapHUD(double ticFrac)
+    {
+        super.DrawAutomapHUD(ticFrac);
+    }
+    
+    void DrawStatus()
+    {
+        DrawTexture(GetMugShot(5), (0, -36), DI_ITEM_OFFSETS);
+
+        DrawString(BigFont, FormatNumber(HealthInterp.GetValue(), 3), (36, LeftY), 0, Font.FindFontColor("Red"));
+
+        LeftY -= LeftOffset;
+
+        if (ArmorInterp.GetValue() > 0)
+        {
+            DrawString(BigFont, FormatNumber(ArmorInterp.GetValue(), 3), (36, LeftY), 0, GetArmorColor());
+
+            LeftY -= LeftOffset;
+        }
+
+        if (Player.WaterLevel > 0 && Player.health > 0)
+        {
+            int air = CPlayer.Air_Finished - Level.Time;
+            int airDisplay = air / 35 + 1;
+            Color airColor = Font.FindFontColor("Blue");
+
+            if (airDisplay <= 5)
+                airColor = Level.Time % 10 < 5 ? Font.FindFontColor("LightBlue") : Font.FindFontColor("Blue");;
+
+            DrawString(BigFont, FormatNumber(air > 0 ? airDisplay : 0, 3), (36, LeftY), 0, airColor);
+
+            LeftY -= LeftOffset;
+        }
+    }
+
+    void DrawScore()
+    {
+        DrawImage("SCR1A0", (15, 17), 0, 1, (-1, -1), (0.75, 0.75));
+        DrawString(BigFont, FormatNumber(ScoreInterp.GetValue()), (28, 4), DI_TEXT_ALIGN_LEFT, Font.FindFontColor("Gold"));
+    }
+
+    void DrawPowers()
+    {
+        PowerEntry powers[] =
+        {
+            PowerEntry.Create(Player.GetEffectTicsForItem("KBuddhaArtifact"), "ARTIA0", "Gold", (2, 13), (0.75, 0.75), true),
+            PowerEntry.Create(Player.GetEffectTicsForItem("KDamageArtifact"), "ARTIA0", "Gold", (2, 13), (0.75, 0.75), true),
+            PowerEntry.Create(Player.GetEffectTicsForItem("KFireSpeedArtifact"), "ARTIA0", "Gold", (2, 13), (0.75, 0.75), true),
+            PowerEntry.Create(Player.GetEffectTicsForItem("KDrainArtifact"), "ARTIA0", "Gold", (2, 13), (0.75, 0.75), true),
+            PowerEntry.Create(Player.GetEffectTicsForItem("KFlightArtifact"), "ARTIA0", "Gold", (2, 13), (0.75, 0.75), true),
+            PowerEntry.Create(Player.GetEffectTicsForItem("KFrightArtifact"), "ARTIA0", "Gold", (2, 13), (0.75, 0.75), true),
+            PowerEntry.Create(Player.GetEffectTicsForItem("KHighJumpArtifact"), "ARTIA0", "Gold", (2, 13), (0.75, 0.75), true),
+            PowerEntry.Create(Player.GetEffectTicsForItem("KInfiniteAmmoArtifact"), "ARTIA0", "Gold", (2, 13), (0.75, 0.75), true),
+            PowerEntry.Create(Player.GetEffectTicsForItem("KInvisibilityArtifact"), "ARTIA0", "Gold", (2, 13), (0.75, 0.75), true),
+            PowerEntry.Create(Player.GetEffectTicsForItem("KInvulnerabilityArtifact"), "ARTIA0", "Gold", (2, 13), (0.75, 0.75), true),
+            PowerEntry.Create(Player.GetEffectTicsForItem("KIronFeetArtifact"), "ARTIA0", "Gold", (2, 13), (0.75, 0.75), true),
+            PowerEntry.Create(Player.GetEffectTicsForItem("KLightArtifact"), "ARTIA0", "Gold", (2, 13), (0.75, 0.75), true),
+            PowerEntry.Create(Player.GetEffectTicsForItem("KTorchArtifact"), "ARTIA0", "Gold", (2, 13), (0.75, 0.75), true),
+            PowerEntry.Create(Player.GetEffectTicsForItem("KProtectionArtifact"), "ARTIA0", "Gold", (2, 13), (0.75, 0.75), true),
+            PowerEntry.Create(Player.GetEffectTicsForItem("KReflectionArtifact"), "ARTIA0", "Gold", (2, 13), (0.75, 0.75), true),
+            PowerEntry.Create(Player.GetEffectTicsForItem("KRegenerationArtifact"), "ARTIA0", "Gold", (2, 13), (0.75, 0.75), true),
+            PowerEntry.Create(Player.GetEffectTicsForItem("KSpeedArtifact"), "ARTIA0", "Gold", (2, 13), (0.75, 0.75), true),
+            PowerEntry.Create(Player.GetEffectTicsForItem("KStrengthArtifact"), "ARTIA0", "Gold", (2, 13), (0.75, 0.75), false),
+            PowerEntry.Create(Player.GetEffectTicsForItem("KTimeArtifact"), "ARTIA0", "Gold", (2, 13), (0.75, 0.75), true)
+        };
+
+        Vector2 pos = (11, 32);
+        int offset = 0;
+
+        for (int i = 0; i < powers.Size(); i++)
+        {
+            if (powers[i].Timer <= 0)
+                continue;
+
+            DrawImage(powers[i].Icon, pos + powers[i].Offset, 0, 1, (-1, -1), powers[i].Scale);
+            
+            if (powers[i].ShowTimer)
+                DrawString(SmallFont, FormatNumber(powers[i].Timer / 35 + 1), pos, DI_TEXT_ALIGN_CENTER, Font.FindFontColor(powers[i].Color));
+
+            pos.X += PowerOffset;
+            
+            if (offset++ > 3)
+            {
+                pos.X = 11;
+                pos.Y += 24;
+                
+                offset = 0;
+            }
+        }
+    }
+
+    void DrawCorner()
+    {
+        Color ammoColor = GetAmmoColor();
+
+        if (CurrentWeapon.Weapon)
+        {
+            UpgradeEntry upgrades[] =
+            {
+                UpgradeEntry.Create(CurrentWeapon.Weapon.DamageUpgrade, CurrentWeapon.Weapon.DamageUpgradeMax, KWeapon.UpgradeColors[WU_DAMAGE]),
+                UpgradeEntry.Create(CurrentWeapon.Weapon.ROFUpgrade, CurrentWeapon.Weapon.ROFUpgradeMax, KWeapon.UpgradeColors[WU_ROF]),
+                UpgradeEntry.Create(CurrentWeapon.Weapon.AccuracyUpgrade, CurrentWeapon.Weapon.AccuracyUpgradeMax, KWeapon.UpgradeColors[WU_ACCURACY]),
+                UpgradeEntry.Create(CurrentWeapon.Weapon.ReloadUpgrade, CurrentWeapon.Weapon.ReloadUpgradeMax, KWeapon.UpgradeColors[WU_RELOAD]),
+                UpgradeEntry.Create(CurrentWeapon.Weapon.ClipSizeUpgrade, CurrentWeapon.Weapon.ClipSizeUpgradeMax, KWeapon.UpgradeColors[WU_CLIPSIZE]),
+                UpgradeEntry.Create(CurrentWeapon.Weapon.ClipUseUpgrade, CurrentWeapon.Weapon.ClipUseUpgradeMax, KWeapon.UpgradeColors[WU_CLIPUSE]),
+                UpgradeEntry.Create(CurrentWeapon.Weapon.PelletUpgrade, CurrentWeapon.Weapon.PelletUpgradeMax, KWeapon.UpgradeColors[WU_PELLET])
+            };
+
+            int offset = 0;
+            bool hasUpgrades = false;
+
+            DrawString(BigFont, ClipInterp.GetValue() .. "/" .. AmmoInterp.GetValue(), (-4, RightY), DI_TEXT_ALIGN_RIGHT, ammoColor);
+
+            RightY -= RightOffset;
+
+            for (int i = upgrades.Size() - 1; i >= 0; i--)
+                if (upgrades[i].IsActive())
+                {
+                    if (!hasUpgrades)
+                        hasUpgrades = true;
+
+                    DrawString(BigFont, FormatNumber(upgrades[i].Current), (-4 - (offset++ * 16), RightY), DI_TEXT_ALIGN_RIGHT, Font.FindFontColor(upgrades[i].Color));
+                }
+
+            if (hasUpgrades)
+                RightY -= RightOffset;
+        }
+        else if (CPlayer.ReadyWeapon && CurrentWeapon.Ammo1)
+        {
+            DrawString(BigFont, FormatNumber(AmmoInterp.GetValue(), 3), (-4, RightY), DI_TEXT_ALIGN_RIGHT, ammoColor);
+
+            RightY -= RightOffset;
+        }
+    }
+
+    void DrawNRGBars()
+    {
+        Vector2 pos = (-100, 0);
+
+        for (int i = 0; i < Energy.Types.Size(); i++)
+        {
+            int Energy = Player.CountInv(Energy.Types[i]);
+
+            DrawBar("NRGBar" .. (i + 1), "", Energy, Player.GetMaxEnergy(), pos, 0, SHADER_HORZ, DI_ITEM_OFFSETS);
+            // DrawString(SmallFont, FormatNumber(Energy, 3), (pos.x + 13 + (i * 14), 0), DI_TEXT_ALIGN_RIGHT, Font.FindFontColor(Energy.Colors[i]));
+
+            pos.y += 5;
+        }
+    }
+
+    void DrawInventory()
+    {
+        if (!isInventoryBarVisible() && Player.InvSel)
+        {
+            DrawInventoryIcon(Player.InvSel, (-14, RightY + 13));
+            DrawString(BigFont, FormatNumber(Player.InvSel.Amount, 3), (-30, RightY), DI_TEXT_ALIGN_RIGHT, Font.FindFontColor("White"));
+        }
+        else if (IsInventoryBarVisible())
+            DrawInventoryBar(InvBar, (-195, -30), 13, DI_ITEM_LEFT_TOP | DI_SCREEN_HCENTER | DI_SCREEN_BOTTOM);
+    }
+    
+    void DrawTarget()
+    {
+        if (!Player.HasTarget())
+            return;
+        
+        KMonster monster = KMonster(Player.Target);
+        Vector2 pos = (0, 6);
+        Color elementColor;
+        string elementBar;
+        
+        if (monster)
+            [elementColor, elementBar] = GetEnemyElementColor(monster.Element);
+        
+        DrawBar(monster ? elementBar : "NRGBar7", "NRGBar1", TargetInterp.GetValue(), Player.Target.SpawnHealth(), (pos.X, pos.Y + 10), 0, SHADER_HORZ, DI_SCREEN_HCENTER | DI_SCREEN_TOP);
+        
+        DrawString(SmallFont, FormatNumber(Player.Target.Health) .. "/" .. FormatNumber(Player.Target.SpawnHealth()), pos, DI_TEXT_ALIGN_CENTER | DI_SCREEN_HCENTER | DI_SCREEN_TOP, Font.FindFontColor("White"));
+        DrawString(SmallFont, Player.Target.GetTag(), (pos.X, pos.Y + 8), DI_TEXT_ALIGN_CENTER | DI_SCREEN_HCENTER | DI_SCREEN_TOP, Font.FindFontColor("White"));
+    }
+    
+    void GetCurrentWeapon()
+    {
+        Inventory ammo1, ammo2;
+        int amount1, amount2, clip;
+        Weapon weapon = CPlayer.ReadyWeapon;
+
+        [ammo1, ammo2, amount1, amount2] = GetCurrentAmmo();
+
+        if (weapon)
+        {
+            if (weapon is "KWeapon")
+            {
+                CurrentWeapon.Weapon = KWeapon(weapon);
+                CurrentWeapon.Clip = KWeapon(weapon).Clip[KWeapon(weapon).Type];
+            }
+            else
+            {
+                CurrentWeapon.Weapon = null;
+                CurrentWeapon.Clip = 0;
+            }
+
+            CurrentWeapon.Ammo1 = ammo1;
+            CurrentWeapon.Ammo2 = ammo2;
+            CurrentWeapon.Amount1 = amount1;
+            CurrentWeapon.Amount2 = amount2;
+        }
+    }
+
+    Color GetArmorColor()
+    {
+        Color armorColor = Font.FindFontColor("White");
+
+        switch (Player.Armor.DamageType)
+        {
+            case 'Normal':   armorColor = Font.FindFontColor("White");    break;
+            case 'Melee':    armorColor = Font.FindFontColor("DarkGray"); break;
+            case 'Fire':     armorColor = Font.FindFontColor("Orange");   break;
+            case 'Ice':      armorColor = Font.FindFontColor("Cyan");     break;
+            case 'Electric': armorColor = Font.FindFontColor("Yellow");   break;
+            case 'Poison':   armorColor = Font.FindFontColor("Green");    break;
+            case 'Void':     armorColor = Font.FindFontColor("Purple");   break;
+        }
+
+        return armorColor;
+    }
+
+    Color GetAmmoColor()
+    {
+        Color ammoColor = Font.FindFontColor("White");
+        
+        if (CurrentWeapon.Ammo1)
+            for (int i = 0; i < Energy.Types.Size(); i++)
+            {
+                if (CurrentWeapon.Ammo1.GetClassName() == Energy.Types[i])
+                {
+                    ammoColor = Font.FindFontColor(Energy.Colors[i]);
+
+                    break;
+                }
+            }
+
+        return ammoColor;
+    }
+    
+    Color, string GetEnemyElementColor(int element)
+    {
+        Color elementColor;
+        string elementString;
+        
+        switch (element)
+        {
+            case E_NONE:
+                elementColor = Font.FindFontColor("White");
+                elementString = "NRGBar7";
+                break;
+            case E_FIRE:
+                elementColor = Font.FindFontColor("Orange");
+                elementString = "NRGBar2";
+                break;
+            case E_ICE:
+                elementColor = Font.FindFontColor("Cyan");
+                elementString = "NRGBar5";
+                break;
+            case E_ELECTRIC:
+                elementColor = Font.FindFontColor("Yellow");
+                elementString = "NRGBar3";
+                break;
+            case E_POISON:
+                elementColor = Font.FindFontColor("Green");
+                elementString = "NRGBar4";
+                break;
+            case E_VOID:
+                elementColor = Font.FindFontColor("Purple");
+                elementString = "NRGBar6";
+                break;
+        }
+        
+        return elementColor, elementString;
+    }
+}

@@ -1,0 +1,103 @@
+class KNumber : Actor
+{
+    const ForwardOffset = 8;
+    const XOffset = 7;
+    
+    Vector3 Position;
+    Vector2 Scale;
+    int Digit;
+    int TotalDigits;
+    double Offset;
+    
+    property Position : Position;
+    property Scale : Scale;
+    property Digit : Digit;
+    property TotalDigits : TotalDigits;
+    property Offset : Offset;
+    
+    default
+    {
+        +Bright;
+        +NoBlockMap;
+        +NoInteraction;
+        +NoGravity;
+        +ForceYBillboard;
+        +NoClip;
+        +NoTimeFreeze;
+        +NotOnAutomap;
+    }
+    
+    override void PostBeginPlay()
+    {
+        super.PostBeginPlay();
+        
+        Vel.Z = 0.5;
+        
+        SetOrigin((Pos.X, Pos.Y, Pos.Z + Height * Scale.Y), true);
+    }
+    
+    override void Tick()
+    {
+        super.Tick();
+        
+        double rightOffset = (-(XOffset * TotalDigits) / 2) + (XOffset * Offset);
+        Vector2 relPos = Level.Vec2Diff(Players[ConsolePlayer].MO.Pos.XY, Position.XY);
+        Vector2 forwardDir = relPos.Unit();
+        Vector2 rightDir = (forwardDir.Y, -forwardDir.X);
+        Vector2 forwardMove = forwardDir * ForwardOffset;
+        Vector2 rightMove = rightDir * rightOffset;
+        Vector3 pos = (Position.X, Position.Y, Pos.Z);
+        
+        pos.XY -= forwardMove + rightMove;
+        
+        A_FadeOut(0.01, true);
+        SetOrigin(pos, false);
+    }
+    
+    states
+    {
+        Spawn:
+            TNT1 A 0;
+            TNT1 A 0 A_JumpIf(Digit == 0, "Digit0");
+            TNT1 A 0 A_JumpIf(Digit == 1, "Digit1");
+            TNT1 A 0 A_JumpIf(Digit == 2, "Digit2");
+            TNT1 A 0 A_JumpIf(Digit == 3, "Digit3");
+            TNT1 A 0 A_JumpIf(Digit == 4, "Digit4");
+            TNT1 A 0 A_JumpIf(Digit == 5, "Digit5");
+            TNT1 A 0 A_JumpIf(Digit == 6, "Digit6");
+            TNT1 A 0 A_JumpIf(Digit == 7, "Digit7");
+            TNT1 A 0 A_JumpIf(Digit == 8, "Digit8");
+            TNT1 A 0 A_JumpIf(Digit == 9, "Digit9");
+            stop;
+        Digit0:
+            D1N0 A -1;
+            stop;
+        Digit1:
+            D1N1 A -1;
+            stop;
+        Digit2:
+            D1N2 A -1;
+            stop;
+        Digit3:
+            D1N3 A -1;
+            stop;
+        Digit4:
+            D1N4 A -1;
+            stop;
+        Digit5:
+            D1N5 A -1;
+            stop;
+        Digit6:
+            D1N6 A -1;
+            stop;
+        Digit7:
+            D1N7 A -1;
+            stop;
+        Digit8:
+            D1N8 A -1;
+            stop;
+        Digit9:
+            D1N9 A -1;
+            stop;
+    }
+}

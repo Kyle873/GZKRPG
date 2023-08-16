@@ -1,0 +1,102 @@
+enum Element
+{
+    E_NONE,
+    E_FIRE,
+    E_ICE,
+    E_ELECTRIC,
+    E_POISON,
+    E_VOID
+}
+
+class KMonster : Actor
+{
+    int Element;
+    int WeakElement;
+    
+    property Element : Element;
+    property WeakElement : WeakElement;
+    
+    default
+    {
+        Monster;
+    }
+}
+
+class KZombieTest : KMonster
+{
+    default
+    {
+		//$Category "KRPG/Enemies/Zombies"
+        
+        Tag "Garcia";
+        Health 50;
+		Radius 20;
+		Height 56;
+		Speed 8;
+		PainChance 200;
+        PainChance "Poison", 0;
+	    PainChance "Fire", 255;
+		SeeSound "enemy/zombie/sight";
+		AttackSound "enemy/zombie/attack";
+		PainSound "enemy/zombie/pain";
+		DeathSound "enemy/zombie/death";
+		ActiveSound "enemy/zombie/active";
+		Obituary "$OB_ZOMBIE";
+        DamageFactor "Poison", 0;
+        DamageFactor "Fire", 2;
+
+        Translation "48 : 79 = 168 : 191", "80 : 111 = 112 : 127";
+        DropItem "KEnergySpawner", 255;
+        DropItem "KHealthSpawner", 16;
+        DropItem "KArmorSpawner", 16;
+        DropItem "KArtifactSpawner", 4;
+        DropItem "KUpgradeSpawner", 4;
+        
+        KMonster.Element E_POISON;
+        KMonster.WeakElement E_FIRE;
+		
+		+FloorClip;
+        // +AlwaysFast;
+    }
+
+    action void A_Attack()
+    {
+        A_CustomBulletAttack(22.5, 0, 1, 5, "KBulletPuff", 0, CBAF_NORANDOM);
+    }
+
+    states
+    {
+        Spawn:
+            POSS AB 10 A_Look;
+            loop;
+        See:
+            POSS AABBCCDD 2 A_Chase;
+            loop;
+        Missile:
+            POSS E 1 A_FaceTarget;
+            POSS F 3 A_Attack;
+            POSS E 1 A_FaceTarget;
+            POSS F 3 A_Attack;
+            POSS E 1 A_FaceTarget;
+            POSS F 3 A_Attack;
+            goto See;
+        Pain:
+            POSS G 3;
+            POSS G 3 A_Pain;
+            goto See;
+        Death:
+            POSS H 5;
+            POSS I 5 A_Scream;
+            POSS J 5 A_NoBlocking;
+            POSS K 5;
+            POSS L -1;
+            stop;
+        XDeath:
+            POSS M 5;
+            POSS N 5 A_XScream;
+            POSS O 5 A_NoBlocking;
+            POSS PQRST 5;
+            POSS U -1;
+            stop;
+    }
+}

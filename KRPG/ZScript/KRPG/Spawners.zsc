@@ -1,0 +1,89 @@
+class KEnergySpawner : RandomSpawner
+{
+    default
+    {
+		//$Category "KRPG/Spawners"
+        
+        DropItem "KRedEnergy", 255, 10;
+        DropItem "KOrangeEnergy", 255, 100;
+        DropItem "KYellowEnergy", 255, 100;
+        DropItem "KGreenEnergy", 255, 100;
+        DropItem "KBlueEnergy", 255, 100;
+        DropItem "KPurpleEnergy", 255, 1;
+        DropItem "KWhiteEnergy", 255, 10;
+    }
+}
+
+class KHealthSpawner : RandomSpawner
+{
+    default
+    {
+		//$Category "KRPG/Spawners"
+        
+        DropItem "KTinyHealth", 255, 100;
+        DropItem "KSmallHealth", 255, 50;
+        DropItem "KMediumHealth", 255, 10;
+        DropItem "KLargeHealth", 255, 1;
+    }
+}
+
+class KArmorSpawner : RandomSpawner
+{
+    default
+    {
+		//$Category "KRPG/Spawners"
+        
+        DropItem "KArmor", 255, 1;
+        DropItem "KFireArmor", 255, 10;
+        DropItem "KIceArmor", 255, 10;
+        DropItem "KElectricArmor", 255, 10;
+        DropItem "KPoisonArmor", 255, 10;
+        DropItem "KVoidArmor", 255, 10;
+    }
+}
+
+class KArtifactSpawner : RandomSpawner
+{
+    default
+    {
+		//$Category "KRPG/Spawners"
+        
+        DropItem "KBuddhaArtifact";
+        DropItem "KDamageArtifact";
+        DropItem "KFireSpeedArtifact";
+        DropItem "KDrainArtifact";
+        DropItem "KFlightArtifact";
+        DropItem "KFrightArtifact";
+        DropItem "KHighJumpArtifact";
+        DropItem "KInfiniteAmmoArtifact";
+        DropItem "KInvisibilityArtifact";
+        DropItem "KInvulnerabilityArtifact";
+        DropItem "KIronFeetArtifact";
+        DropItem "KLightArtifact";
+        DropItem "KTorchArtifact";
+        DropItem "KProtectionArtifact";
+        DropItem "KReflectionArtifact";
+        DropItem "KRegenerationArtifact";
+        DropItem "KSpeedArtifact";
+        DropItem "KStrengthArtifact";
+        DropItem "KTimeArtifact";
+    }
+}
+
+class KUpgradeSpawner : RandomSpawner
+{
+    default
+    {
+		//$Category "KRPG/Spawners"
+        
+        DropItem "KHealthUpgrade";
+        DropItem "KEnergyUpgrade";
+        DropItem "KDamageUpgrade";
+        DropItem "KROFUpgrade";
+        DropItem "KAccuracyUpgrade";
+        DropItem "KReloadUpgrade";
+        DropItem "KClipSizeUpgrade";
+        DropItem "KClipUseUpgrade";
+        DropItem "KPelletUpgrade";
+    }
+}

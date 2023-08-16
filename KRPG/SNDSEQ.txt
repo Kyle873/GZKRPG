@@ -1,0 +1,9 @@
+:SS2Door
+    PlayUntilDone doors/ss2/open
+    StopSound doors/ss2/close
+end
+
+:SS2Platform
+    PlayUntilDone platforms/ss2/start
+    StopSound platforms/ss2/stop
+end

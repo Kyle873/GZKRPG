@@ -1,0 +1,57 @@
+class KBulletPuff : BulletPuff
+{
+}
+
+class KNormalPuff : BulletPuff
+{
+    default
+    {
+        DamageType "Normal";
+        Translation "GraySaturation";
+    }
+}
+
+class KFirePuff : BulletPuff
+{
+    default
+    {
+        DamageType "Fire";
+        Translation "OrangeSaturation";
+    }
+}
+
+class KIcePuff : BulletPuff
+{
+    default
+    {
+        DamageType "Ice";
+        Translation "BlueSaturation";
+    }
+}
+
+class KElectricPuff : BulletPuff
+{
+    default
+    {
+        DamageType "Electric";
+        Translation "YellowSaturation";
+    }
+}
+
+class KPoisonPuff : BulletPuff
+{
+    default
+    {
+        DamageType "Poison";
+        Translation "GreenSaturation";
+    }
+}
+
+class KVoidPuff : BulletPuff
+{
+    default
+    {
+        DamageType "Void";
+        Translation "PurpleSaturation";
+    }
+}

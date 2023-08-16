@@ -1,0 +1,737 @@
+class KArtifact : PowerupGiver
+{
+    default
+    {
+        RenderStyle "Add";
+        Alpha 0.5;
+        
+        Inventory.PickupSound "items/artifact/get";
+        Inventory.UseSound "items/artifact/use";
+        Inventory.DefMaxAmount;
+        
+        +FloatBob;
+        
+        +Inventory.InvBar;
+    }
+}
+
+class KBuddhaArtifactPower : PowerBuddha
+{
+    default
+    {
+        Powerup.Duration -60;
+        
+        +Inventory.AutoActivate;
+        +Inventory.AdditiveTime;
+        +Inventory.PersistentPower;
+    }
+}
+
+class KBuddhaArtifact : KArtifact
+{
+    default
+    {
+		//$Category "KRPG/Artifacts"
+        
+        Tag "Immortal Artifact";
+        
+        Inventory.PickupMessage "Picked up an Immortal Artifact.";
+        
+        Powerup.Type "KBuddhaArtifactPower";
+    }
+    
+    states
+    {
+        Spawn:
+            ARTI A -1 Bright;
+            stop;
+    }
+}
+
+class KDamageArtifactPower : PowerDamage
+{
+    default
+    {
+        DamageFactor "Normal", 2;
+        
+        Powerup.Duration -60;
+        
+        +Inventory.AutoActivate;
+        +Inventory.AdditiveTime;
+        +Inventory.PersistentPower;
+    }
+}
+
+class KDamageArtifact : KArtifact
+{
+    default
+    {
+		//$Category "KRPG/Artifacts"
+        
+        Tag "Power Artifact";
+        
+        Inventory.PickupMessage "Picked up a Power Artifact.";
+        
+        Powerup.Type "KDamageArtifactPower";
+    }
+    
+    states
+    {
+        Spawn:
+            ARTI A -1 Bright;
+            stop;
+    }
+}
+
+class KFireSpeedArtifactPower : PowerDoubleFiringSpeed
+{
+    default
+    {
+        Powerup.Duration -60;
+        
+        +Inventory.AutoActivate;
+        +Inventory.AdditiveTime;
+        +Inventory.PersistentPower;
+    }
+}
+
+class KFireSpeedArtifact : KArtifact
+{
+    default
+    {
+		//$Category "KRPG/Artifacts"
+        
+        Tag "Dexterity Artifact";
+        
+        Inventory.PickupMessage "Picked up a Dexterity Artifact.";
+
+        Powerup.Type "KFireSpeedArtifactPower";
+    }
+    
+    states
+    {
+        Spawn:
+            ARTI A -1 Bright;
+            stop;
+    }
+}
+
+class KDrainArtifactPower : PowerDrain
+{
+    default
+    {
+        Powerup.Duration -60;
+        
+        +Inventory.AutoActivate;
+        +Inventory.AdditiveTime;
+        +Inventory.PersistentPower;
+    }
+}
+
+class KDrainArtifact : KArtifact
+{
+    default
+    {
+		//$Category "KRPG/Artifacts"
+        
+        Tag "Drain Artifact";
+        
+        Inventory.PickupMessage "Picked up a Drain Artifact.";
+        
+        Powerup.Type "KDrainArtifactPower";
+    }
+    
+    states
+    {
+        Spawn:
+            ARTI A -1 Bright;
+            stop;
+    }
+}
+
+class KFlightArtifactPower : PowerFlight
+{
+    default
+    {
+        Powerup.Duration -60;
+        
+        +Inventory.AutoActivate;
+        +Inventory.AdditiveTime;
+        +Inventory.PersistentPower;
+    }
+}
+
+class KFlightArtifact : KArtifact
+{
+    default
+    {
+		//$Category "KRPG/Artifacts"
+        
+        Tag "Flight Artifact";
+        
+        Inventory.PickupMessage "Picked up a Flight Artifact.";
+        
+        Powerup.Type "KFlightArtifactPower";
+    }
+    
+    states
+    {
+        Spawn:
+            ARTI A -1 Bright;
+            stop;
+    }
+}
+
+class KFrightArtifactPower : PowerFrightener
+{
+    default
+    {
+        Powerup.Duration -60;
+        
+        +Inventory.AutoActivate;
+        +Inventory.AdditiveTime;
+        +Inventory.PersistentPower;
+    }
+}
+
+class KFrightArtifact : KArtifact
+{
+    default
+    {
+		//$Category "KRPG/Artifacts"
+        
+        Tag "Fright Artifact";
+        
+        Inventory.PickupMessage "Picked up a Fright Artifact.";
+        
+        Powerup.Type "KFrightArtifactPower";
+    }
+    
+    states
+    {
+        Spawn:
+            ARTI A -1 Bright;
+            stop;
+    }
+}
+
+class KHighJumpArtifactPower : PowerHighJump
+{
+    default
+    {
+        Powerup.Duration -60;
+        
+        +Inventory.AutoActivate;
+        +Inventory.AdditiveTime;
+        +Inventory.PersistentPower;
+    }
+}
+
+class KHighJumpArtifact : KArtifact
+{
+    default
+    {
+		//$Category "KRPG/Artifacts"
+        
+        Tag "Gravity Artifact";
+        
+        Inventory.PickupMessage "Picked up a Gravity Artifact.";
+        
+        Powerup.Type "KHighJumpArtifactPower";
+    }
+    
+    states
+    {
+        Spawn:
+            ARTI A -1 Bright;
+            stop;
+    }
+}
+
+class KInfiniteAmmoArtifactPower : PowerInfiniteAmmo
+{
+    default
+    {
+        Powerup.Duration -60;
+        
+        +Inventory.AutoActivate;
+        +Inventory.AdditiveTime;
+        +Inventory.PersistentPower;
+    }
+}
+
+class KInfiniteAmmoArtifact : KArtifact
+{
+    default
+    {
+		//$Category "KRPG/Artifacts"
+        
+        Tag "Infinity Artifact";
+        
+        Inventory.PickupMessage "Picked up an Infinity Artifact.";
+        
+        Powerup.Type "KInfiniteAmmoArtifactPower";
+    }
+    
+    states
+    {
+        Spawn:
+            ARTI A -1 Bright;
+            stop;
+    }
+}
+
+class KInvisibilityArtifactPower : PowerShadow
+{
+    default
+    {
+        Powerup.Duration -60;
+        Powerup.Strength 100;
+        Powerup.Mode "Cumulative";
+        
+        +Inventory.AutoActivate;
+        +Inventory.AdditiveTime;
+        +Inventory.PersistentPower;
+    }
+}
+
+class KInvisibilityArtifact : KArtifact
+{
+    default
+    {
+		//$Category "KRPG/Artifacts"
+        
+        Tag "Shadow Artifact";
+        
+        Inventory.PickupMessage "Picked up a Shadow Artifact.";
+        
+        Powerup.Type "KInvisibilityArtifactPower";
+    }
+    
+    states
+    {
+        Spawn:
+            ARTI A -1 Bright;
+            stop;
+    }
+}
+
+class KInvulnerabilityArtifactPower : PowerInvulnerable
+{
+    default
+    {
+        Powerup.Duration -60;
+        Powerup.Mode "Reflective";
+        
+        +Inventory.AutoActivate;
+        +Inventory.AdditiveTime;
+        +Inventory.PersistentPower;
+    }
+}
+
+class KInvulnerabilityArtifact : KArtifact
+{
+    default
+    {
+		//$Category "KRPG/Artifacts"
+        
+        Tag "Invulnerability Artifact";
+        
+        Inventory.PickupMessage "Picked up an Invulnerability Artifact.";
+        
+        Powerup.Type "KInvulnerabilityArtifactPower";
+    }
+    
+    states
+    {
+        Spawn:
+            ARTI A -1 Bright;
+            stop;
+    }
+}
+
+class KIronFeetArtifactPower : PowerIronFeet
+{
+    default
+    {
+        Powerup.Duration -60;
+        Powerup.Color "000000", 0;
+        
+        +Inventory.AutoActivate;
+        +Inventory.AdditiveTime;
+        +Inventory.PersistentPower;
+    }
+}
+
+class KIronFeetArtifact : KArtifact
+{
+    default
+    {
+		//$Category "KRPG/Artifacts"
+        
+        Tag "Iron Artifact";
+        
+        Inventory.PickupMessage "Picked up an Iron Artifact.";
+        
+        Powerup.Type "KIronFeetArtifactPower";
+    }
+    
+    states
+    {
+        Spawn:
+            ARTI A -1 Bright;
+            stop;
+    }
+}
+
+class KLightArtifactPower : PowerLightAmp
+{
+    default
+    {
+        Powerup.Duration -60;
+        
+        +Inventory.AutoActivate;
+        +Inventory.AdditiveTime;
+        +Inventory.PersistentPower;
+    }
+}
+
+class KLightArtifact : KArtifact
+{
+    default
+    {
+		//$Category "KRPG/Artifacts"
+        
+        Tag "Light Artifact";
+        
+        Inventory.PickupMessage "Picked up a Light Artifact.";
+        
+        Powerup.Type "KLightArtifactPower";
+    }
+    
+    states
+    {
+        Spawn:
+            ARTI A -1 Bright;
+            stop;
+    }
+}
+
+class KTorchArtifactLight : DynamicLight
+{
+    default
+    {
+        // Red, Green, Blue, Intensity
+        Args 108, 179, 212, 128;
+    }
+}
+
+class KTorchArtifactOrb : Actor
+{
+    default
+    {
+        RenderStyle "AddStencil";
+        StencilColor "6CB3D4";
+        Alpha 0.75;
+        Scale 0.5;
+        
+        +Bright;
+        +NoBlockMap;
+        +NoInteraction;
+        +NoGravity;
+        +NoClip;
+        +NoTimeFreeze;
+        +NotOnAutomap;
+    }
+    
+    states
+    {
+        Spawn:
+            ARTI A -1;
+            stop;
+    }
+}
+
+class KTorchArtifactPower : Powerup
+{
+    const SpinSpeed = 8;
+    const SpinOffset = 8;
+    const HeightOffset = 8;
+    const FlickerMin = 1.0;
+    const FlickerMax = 1.25;
+    
+    KTorchArtifactLight Light;
+    KTorchArtifactOrb Orb;
+    int Intensity;
+    
+    default
+    {
+        Powerup.Duration -60;
+        
+        +Inventory.AutoActivate;
+        +Inventory.AdditiveTime;
+        +Inventory.PersistentPower;
+    }
+    
+    override void InitEffect()
+    {
+        super.InitEffect();
+        
+        Light = KTorchArtifactLight(Spawn("KTorchArtifactLight", GetLightPosition()));
+        Orb = KTorchArtifactOrb(Spawn("KTorchArtifactOrb", GetLightPosition()));
+        
+        Intensity = Light.Args[3];
+    }
+    
+    override void DoEffect()
+    {
+        super.DoEffect();
+        
+        Light.Args[3] = (EffectTics < Intensity ? EffectTics : Intensity) * FRandom(FlickerMin, FlickerMax);
+        
+        Light.SetOrigin(GetLightPosition(), true);
+        Orb.SetOrigin(GetLightPosition(), true);
+    }
+    
+    override void EndEffect()
+    {
+        super.EndEffect();
+        
+        if (Light)
+            Light.Destroy();
+        
+        if (Orb)
+            Orb.Destroy();
+    }
+    
+    Vector3 GetLightPosition()
+    {
+        return (Owner.Pos.X + Sin(Level.Time * SpinSpeed) * SpinOffset, Owner.Pos.Y + Cos(Level.Time * SpinSpeed) * SpinOffset, Owner.Pos.Z + Owner.Height - HeightOffset);
+    }
+}
+
+class KTorchArtifact : KArtifact
+{
+    default
+    {
+		//$Category "KRPG/Artifacts"
+        
+        Tag "Torch Artifact";
+        
+        Inventory.PickupMessage "Picked up a Torch Artifact.";
+        
+        Powerup.Type "KTorchArtifactPower";
+    }
+    
+    states
+    {
+        Spawn:
+            ARTI A -1 Bright;
+            stop;
+    }
+}
+
+class KProtectionArtifactPower : PowerProtection
+{
+    default
+    {
+        DamageFactor "Normal", 0.5;
+        
+        Powerup.Duration -60;
+        
+        +DontBlast;
+        +DontMorph;
+        +DontRip;
+        +DontSquash;
+        +NoRadiusDmg;
+        +NoTeleOther;
+        
+        +Inventory.AutoActivate;
+        +Inventory.AdditiveTime;
+        +Inventory.PersistentPower;
+    }
+}
+
+class KProtectionArtifact : KArtifact
+{
+    default
+    {
+		//$Category "KRPG/Artifacts"
+        
+        Tag "Protection Artifact";
+        
+        Inventory.PickupMessage "Picked up a Protection Artifact.";
+        
+        Powerup.Type "KProtectionArtifactPower";
+    }
+    
+    states
+    {
+        Spawn:
+            ARTI A -1 Bright;
+            stop;
+    }
+}
+
+class KReflectionArtifactPower : PowerReflection
+{
+    default
+    {
+        Powerup.Duration -60;
+        
+        +Inventory.AutoActivate;
+        +Inventory.AdditiveTime;
+        +Inventory.PersistentPower;
+    }
+}
+
+class KReflectionArtifact : KArtifact
+{
+    default
+    {
+		//$Category "KRPG/Artifacts"
+        
+        Tag "Reflection Artifact";
+        
+        Inventory.PickupMessage "Picked up a Reflection Artifact.";
+        
+        Powerup.Type "KReflectionArtifactPower";
+    }
+    
+    states
+    {
+        Spawn:
+            ARTI A -1 Bright;
+            stop;
+    }
+}
+
+class KRegenerationArtifactPower : PowerRegeneration
+{
+    default
+    {
+        Powerup.Duration -60;
+        
+        +Inventory.AutoActivate;
+        +Inventory.AdditiveTime;
+        +Inventory.PersistentPower;
+    }
+}
+
+class KRegenerationArtifact : KArtifact
+{
+    default
+    {
+		//$Category "KRPG/Artifacts"
+        
+        Tag "Regeneration Artifact";
+        
+        Inventory.PickupMessage "Picked up a Regeneration Artifact.";
+        
+        Powerup.Type "KRegenerationArtifactPower";
+    }
+    
+    states
+    {
+        Spawn:
+            ARTI A -1 Bright;
+            stop;
+    }
+}
+
+class KSpeedArtifactPower : PowerSpeed
+{
+    default
+    {
+        Powerup.Duration -60;
+        
+        +Inventory.AutoActivate;
+        +Inventory.AdditiveTime;
+        +Inventory.PersistentPower;
+    }
+}
+
+class KSpeedArtifact : KArtifact
+{
+    default
+    {
+		//$Category "KRPG/Artifacts"
+        
+        Tag "Speed Artifact";
+        
+        Inventory.PickupMessage "Picked up a Speed Artifact.";
+        
+        Powerup.Type "KSpeedArtifactPower";
+    }
+    
+    states
+    {
+        Spawn:
+            ARTI A -1 Bright;
+            stop;
+    }
+}
+
+class KStrengthArtifactPower : PowerStrength
+{
+    default
+    {
+        +Inventory.AutoActivate;
+        +Inventory.AdditiveTime;
+        +Inventory.PersistentPower;
+    }
+}
+
+class KStrengthArtifact : KArtifact
+{
+    default
+    {
+		//$Category "KRPG/Artifacts"
+        
+        Tag "Strength Artifact";
+        
+        Inventory.PickupMessage "Picked up a Strength Artifact.";
+        
+        Powerup.Type "KStrengthArtifactPower";
+    }
+    
+    states
+    {
+        Spawn:
+            ARTI A -1 Bright;
+            stop;
+    }
+}
+
+class KTimeArtifactPower : PowerTimeFreezer
+{
+    default
+    {
+        Powerup.Duration -10;
+        
+        +Inventory.AutoActivate;
+        +Inventory.AdditiveTime;
+        +Inventory.PersistentPower;
+    }
+}
+
+class KTimeArtifact : KArtifact
+{
+    default
+    {
+		//$Category "KRPG/Artifacts"
+        
+        Tag "Time Artifact";
+        
+        Inventory.PickupMessage "Picked up a Time Artifact.";
+        
+        Powerup.Type "KTimeArtifactPower";
+    }
+    
+    states
+    {
+        Spawn:
+            ARTI A -1 Bright;
+            stop;
+    }
+}

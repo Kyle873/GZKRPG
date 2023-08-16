@@ -1,0 +1,25 @@
+splash Water
+{
+    SmallClass WaterSplash
+    SmallSound terrain/water/splash
+
+    BaseClass WaterSplashBase
+    ChunkClass WaterSplash
+    ChunkXVelShift 8
+    ChunkYVelShift 8
+    ChunkZVelShift 8
+    ChunkBaseZVel 2
+    Sound terrain/water/splash
+
+    NoAlert
+}
+
+terrain Water
+{
+    Splash Water
+    FootClip 8
+
+    Liquid
+}
+
+floor FWATER1 Water

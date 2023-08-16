@@ -1,0 +1,29 @@
+#library "Map"
+
+#include "zcommon.acs"
+
+function void LightSwitchOff(int tid, int red, int green, int blue, int baseIntensity, int time)
+{
+	int intensity = baseIntensity;
+	
+	while (intensity > 0)
+	{
+		SetThingSpecial(tid, 0, red, green, blue, intensity);
+		
+		intensity -= baseIntensity / time;
+		Delay(1);
+	}
+}
+
+function void LightSwitchOn(int tid, int red, int green, int blue, int destIntensity, int time)
+{
+	int intensity = 0;
+	
+	while (intensity < destIntensity)
+	{
+		SetThingSpecial(tid, 0, red, green, blue, intensity);
+		
+		intensity += destIntensity / time;
+		Delay(1);
+	}
+}

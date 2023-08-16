@@ -1,0 +1,23 @@
+class KPuzzleKey : PuzzleItem
+{
+    default
+    {
+		//$Category "KRPG/Keys"
+        
+		Tag "Test Key";
+
+        Inventory.PickupMessage "Picked up a test key.";
+        Inventory.PickupSound "items/key/get";
+
+        PuzzleItem.Number 1;
+
+        -NoGravity;
+    }
+
+    states
+    {
+        Spawn:
+            TKEY A -1 Bright;
+            loop;
+    }
+}

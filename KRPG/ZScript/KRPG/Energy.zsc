@@ -1,0 +1,178 @@
+class Energy
+{
+    static const name Types[] =
+    {
+        "KRedEnergy",
+        "KOrangeEnergy",
+        "KYellowEnergy",
+        "KGreenEnergy",
+        "KBlueEnergy",
+        "KPurpleEnergy",
+        "KWhiteEnergy"
+    };
+
+    static const name Colors[] =
+    {
+        "Red",
+        "Orange",
+        "Yellow",
+        "Green",
+        "Cyan",
+        "Purple",
+        "White"
+    };
+}
+
+class KRedEnergy : Ammo
+{
+    default
+    {
+		//$Category "KRPG/Energy"
+		
+		Scale 0.5;
+
+        Inventory.PickupMessage "Picked up some Red Energy.";
+        Inventory.PickupSound "items/Energy/get";
+        Inventory.Amount 5;
+        Inventory.MaxAmount 100;
+    }
+
+    states
+    {
+        Spawn:
+            NRGR ABCD 4 Bright;
+            loop;
+    }
+}
+
+class KOrangeEnergy : Ammo
+{
+    default
+    {
+		//$Category "KRPG/Energy"
+		
+        Scale 0.5;
+
+        Inventory.PickupMessage "Picked up some Orange Energy.";
+        Inventory.PickupSound "items/Energy/get";
+        Inventory.Amount 5;
+        Inventory.MaxAmount 100;
+    }
+
+    states
+    {
+        Spawn:
+            NRGO ABCD 4 Bright;
+            loop;
+    }
+}
+
+class KYellowEnergy : Ammo
+{
+    default
+    {
+		//$Category "KRPG/Energy"
+		
+        Scale 0.5;
+
+        Inventory.PickupMessage "Picked up some Yellow Energy.";
+        Inventory.PickupSound "items/Energy/get";
+        Inventory.Amount 5;
+        Inventory.MaxAmount 100;
+    }
+
+    states
+    {
+        Spawn:
+            NRGY ABCD 4 Bright;
+            loop;
+    }
+}
+
+class KGreenEnergy : Ammo
+{
+    default
+    {
+		//$Category "KRPG/Energy"
+		
+        Scale 0.5;
+
+        Inventory.PickupMessage "Picked up some Green Energy.";
+        Inventory.PickupSound "items/Energy/get";
+        Inventory.Amount 5;
+        Inventory.MaxAmount 100;
+    }
+
+    states
+    {
+        Spawn:
+            NRGG ABCD 4 Bright;
+            loop;
+    }
+}
+
+class KBlueEnergy : Ammo
+{
+    default
+    {
+		//$Category "KRPG/Energy"
+		
+        Scale 0.5;
+
+        Inventory.PickupMessage "Picked up some Blue Energy.";
+        Inventory.PickupSound "items/Energy/get";
+        Inventory.Amount 5;
+        Inventory.MaxAmount 100;
+    }
+
+    states
+    {
+        Spawn:
+            NRGB ABCD 4 Bright;
+            loop;
+    }
+}
+
+class KPurpleEnergy : Ammo
+{
+    default
+    {
+		//$Category "KRPG/Energy"
+		
+        Scale 0.5;
+
+        Inventory.PickupMessage "Picked up some Purple Energy.";
+        Inventory.PickupSound "items/Energy/get";
+        Inventory.Amount 5;
+        Inventory.MaxAmount 100;
+    }
+
+    states
+    {
+        Spawn:
+            NRGP ABCD 4 Bright;
+            loop;
+    }
+}
+
+class KWhiteEnergy : Ammo
+{
+    default
+    {
+		//$Category "KRPG/Energy"
+		
+        Scale 0.5;
+
+        Inventory.PickupMessage "Picked up some White Energy.";
+        Inventory.PickupSound "items/Energy/get";
+        Inventory.Amount 5;
+        Inventory.MaxAmount 100;
+    }
+
+    states
+    {
+        Spawn:
+            NRGW ABCD 4 Bright;
+            loop;
+    }
+}

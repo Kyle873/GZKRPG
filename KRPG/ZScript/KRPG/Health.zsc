@@ -1,0 +1,88 @@
+class KHealth : HealthPickup
+{
+    default
+    {
+        Inventory.PickupSound "items/health/get";
+        Inventory.UseSound "items/health/use";
+        
+        HealthPickup.AutoUse 1;
+
+        +FloatBob;
+    }
+}
+
+class KTinyHealth : KHealth
+{
+    default
+    {
+		//$Category "KRPG/Health"
+        Tag "Red Health Vial";
+        Health 5;
+        
+        Inventory.PickupMessage "Picked up a tiny health vial.";
+    }
+    
+    states
+    {
+        Spawn:
+            VIAL A -1 bright;
+            stop;
+    }
+}
+
+class KSmallHealth : KHealth
+{
+    default
+    {
+		//$Category "KRPG/Health"
+        Tag "Green Health Vial";
+        Health 20;
+        
+        Inventory.PickupMessage "Picked up a small health vial.";
+    }
+    
+    states
+    {
+        Spawn:
+            VIAL B -1 bright;
+            stop;
+    }
+}
+
+class KMediumHealth : KHealth
+{
+    default
+    {
+		//$Category "KRPG/Health"
+        Tag "Blue Health Vial";
+        Health 50;
+        
+        Inventory.PickupMessage "Picked up a medium health vial.";
+    }
+    
+    states
+    {
+        Spawn:
+            VIAL C -1 bright;
+            stop;
+    }
+}
+
+class KLargeHealth : KHealth
+{
+    default
+    {
+		//$Category "KRPG/Health"
+        Tag "Gold Health Vial";
+        Health 100;
+        
+        Inventory.PickupMessage "Picked up a large health vial.";
+    }
+    
+    states
+    {
+        Spawn:
+            VIAL D -1 bright;
+            stop;
+    }
+}

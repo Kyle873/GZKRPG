@@ -1,0 +1,40 @@
+class Type abstract
+{
+    static clearscope bool ClassExists(string className)
+    {
+        Class type = className;
+
+        return type != null;
+    }
+
+    static clearscope bool IsSubclass(string className, string parentName)
+    {
+        Class parent = parentName;
+        Class type = className;
+
+        return (parent && type) ? type is parent : false;
+    }
+
+    static clearscope bool ObjectIs(Object o, string className)
+    {
+        return ClassExists(className) ? o is className : false;
+    }
+}
+
+class KDraw : Thinker
+{
+    override void PostBeginPlay()
+    {
+        super.PostBeginPlay();
+
+        ChangeStatNum(STAT_STATIC);
+    }
+
+    static KDraw Get()
+    {
+        ThinkerIterator it = ThinkerIterator.Create("KDraw", STAT_STATIC);
+        KDraw draw = KDraw(it.Next());
+
+        return draw ? draw : new("KDraw");
+    }
+}
