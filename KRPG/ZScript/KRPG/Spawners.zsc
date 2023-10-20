@@ -1,3 +1,16 @@
+class KHealthSpawner : RandomSpawner
+{
+    default
+    {
+		//$Category "KRPG/Spawners"
+        
+        DropItem "KTinyHealth", 255, 100;
+        DropItem "KSmallHealth", 255, 50;
+        DropItem "KMediumHealth", 255, 10;
+        DropItem "KLargeHealth", 255, 1;
+    }
+}
+
 class KEnergySpawner : RandomSpawner
 {
     default
@@ -11,19 +24,6 @@ class KEnergySpawner : RandomSpawner
         DropItem "KBlueEnergy", 255, 100;
         DropItem "KPurpleEnergy", 255, 1;
         DropItem "KWhiteEnergy", 255, 10;
-    }
-}
-
-class KHealthSpawner : RandomSpawner
-{
-    default
-    {
-		//$Category "KRPG/Spawners"
-        
-        DropItem "KTinyHealth", 255, 100;
-        DropItem "KSmallHealth", 255, 50;
-        DropItem "KMediumHealth", 255, 10;
-        DropItem "KLargeHealth", 255, 1;
     }
 }
 
@@ -81,9 +81,6 @@ class KUpgradeSpawner : RandomSpawner
         DropItem "KDamageUpgrade";
         DropItem "KROFUpgrade";
         DropItem "KAccuracyUpgrade";
-        DropItem "KReloadUpgrade";
-        DropItem "KClipSizeUpgrade";
-        DropItem "KClipUseUpgrade";
         DropItem "KPelletUpgrade";
     }
 }

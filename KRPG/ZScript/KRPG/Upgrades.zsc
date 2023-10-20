@@ -78,7 +78,7 @@ class KEnergyUpgrade : KUpgrade
     override Inventory CreateTossable(int amt)
     {
         if (Amount >= -amt)
-            KPlayer(Owner).EnergyUpgrade += amt;
+            KPlayer(Owner).EnergyUpgrade -= amt;
 
         return super.CreateTossable(amt);
     }
@@ -185,106 +185,7 @@ class KAccuracyUpgrade : KUpgrade
     States
     {
         Spawn:
-            UPGG C -1 Bright;
-            stop;
-    }
-}
-
-class KReloadUpgrade : KUpgrade
-{
-    default
-    {
-		//$Category "KRPG/Upgrades"
-        
-        Tag "Reload Upgrade";
-        RenderStyle "Add";
-
-        Inventory.PickupMessage "Picked up a Reload upgrade.";
-
-        +FloatBob;
-    }
-
-    override bool Use(bool pickup)
-    {
-        KWeapon weapon = KWeapon(KPlayer(Owner).Player.ReadyWeapon);
-
-        if (weapon is "KWeapon")
-            if (weapon.UpgradeReload())
-                return !super.Use(pickup);
-
-        return false;
-    }
-
-    States
-    {
-        Spawn:
             UPGG D -1 Bright;
-            stop;
-    }
-}
-
-class KClipSizeUpgrade : KUpgrade
-{
-    default
-    {
-		//$Category "KRPG/Upgrades"
-        
-        Tag "Clip Size Upgrade";
-        RenderStyle "Add";
-
-        Inventory.PickupMessage "Picked up a Clip Size upgrade.";
-
-        +FloatBob;
-    }
-
-    override bool Use(bool pickup)
-    {
-        KWeapon weapon = KWeapon(KPlayer(Owner).Player.ReadyWeapon);
-
-        if (weapon is "KWeapon")
-            if (weapon.UpgradeClipSize())
-                return !super.Use(pickup);
-
-        return false;
-    }
-
-    States
-    {
-        Spawn:
-            UPGG E -1 Bright;
-            stop;
-    }
-}
-
-class KClipUseUpgrade : KUpgrade
-{
-    default
-    {
-		//$Category "KRPG/Upgrades"
-        
-        Tag "Clip Use Upgrade";
-        RenderStyle "Add";
-
-        Inventory.PickupMessage "Picked up a Clip Use upgrade.";
-
-        +FloatBob;
-    }
-
-    override bool Use(bool pickup)
-    {
-        KWeapon weapon = KWeapon(KPlayer(Owner).Player.ReadyWeapon);
-
-        if (weapon is "KWeapon")
-            if (weapon.UpgradeClipUse())
-                return !super.Use(pickup);
-
-        return false;
-    }
-
-    States
-    {
-        Spawn:
-            UPGG F -1 Bright;
             stop;
     }
 }
@@ -317,7 +218,7 @@ class KPelletUpgrade : KUpgrade
     States
     {
         Spawn:
-            UPGG G -1 Bright;
+            UPGG C -1 Bright;
             stop;
     }
 }

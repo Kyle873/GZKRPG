@@ -20,12 +20,6 @@ class KTestHandler : StaticEventHandler
                     weapon.UpgradeROF();
                 for (int i = 0; i < weapon.AccuracyUpgradeMax; i++)
                     weapon.UpgradeAccuracy();
-                for (int i = 0; i < weapon.ReloadUpgradeMax; i++)
-                    weapon.UpgradeReload();
-                for (int i = 0; i < weapon.ClipSizeUpgradeMax; i++)
-                    weapon.UpgradeClipSize();
-                for (int i = 0; i < weapon.ClipUseUpgradeMax; i++)
-                    weapon.UpgradeClipUse();
                 for (int i = 0; i < weapon.PelletUpgradeMax; i++)
                     weapon.UpgradePellet();
 

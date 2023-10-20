@@ -1,13 +1,3 @@
-struct WeaponInfo
-{
-    KWeapon Weapon;
-    Inventory Ammo1;
-    Inventory Ammo2;
-    int Amount1;
-    int Amount2;
-    int Clip;
-}
-
 class PowerEntry
 {
     int Timer;
@@ -64,7 +54,7 @@ class KStatusBar : BaseStatusBar
     const PowerOffset = 24;
 
     KPlayer Player;
-    WeaponInfo CurrentWeapon;
+    KWeapon ReadyWeapon;
 
     HUDFont BigFont;
     HUDFont SmallFont;
@@ -74,7 +64,6 @@ class KStatusBar : BaseStatusBar
     DynamicValueInterpolator HealthInterp;
     DynamicValueInterpolator ArmorInterp;
     DynamicValueInterpolator ScoreInterp;
-    DynamicValueInterpolator ClipInterp;
     DynamicValueInterpolator AmmoInterp;
     DynamicValueInterpolator TargetInterp;
 
@@ -100,7 +89,6 @@ class KStatusBar : BaseStatusBar
         HealthInterp = DynamicValueInterpolator.Create(0, 0.25, 1, 100);
         ArmorInterp = DynamicValueInterpolator.Create(0, 0.25, 1, 100);
         ScoreInterp = DynamicValueInterpolator.Create(0, 0.1, 1, 10000);
-        ClipInterp = DynamicValueInterpolator.Create(0, 0.25, 1, 100);
         AmmoInterp = DynamicValueInterpolator.Create(0, 0.25, 1, 100);
         TargetInterp = DynamicValueInterpolator.Create(0, 0.25, 1, 100);
     }
@@ -110,17 +98,17 @@ class KStatusBar : BaseStatusBar
         super.Tick();
 
         Player = KPlayer(CPlayer.MO);
-
-        GetCurrentWeapon();
-
+        ReadyWeapon = KWeapon(CPlayer.ReadyWeapon);
+        Inventory ammo = GetCurrentAmmo();
+        
         if (!Player)
             return;
-
-        HealthInterp.Update(Player.health > 0 ? Player.health : 0);
+        
+        HealthInterp.Update(Player.Health > 0 ? Player.Health : 0);
         ArmorInterp.Update(Player.Armor.Current);
         ScoreInterp.Update(Player.Score);
-        ClipInterp.Update(CurrentWeapon.Clip);
-        AmmoInterp.Update(CurrentWeapon.Amount1);
+        if (ammo)
+            AmmoInterp.Update(ammo.Amount);
         
         if (Player.HasTarget())
             TargetInterp.Update(Player.Target.Health);
@@ -244,25 +232,20 @@ class KStatusBar : BaseStatusBar
 
     void DrawCorner()
     {
-        Color ammoColor = GetAmmoColor();
-
-        if (CurrentWeapon.Weapon)
+        if (ReadyWeapon)
         {
             UpgradeEntry upgrades[] =
             {
-                UpgradeEntry.Create(CurrentWeapon.Weapon.DamageUpgrade, CurrentWeapon.Weapon.DamageUpgradeMax, KWeapon.UpgradeColors[WU_DAMAGE]),
-                UpgradeEntry.Create(CurrentWeapon.Weapon.ROFUpgrade, CurrentWeapon.Weapon.ROFUpgradeMax, KWeapon.UpgradeColors[WU_ROF]),
-                UpgradeEntry.Create(CurrentWeapon.Weapon.AccuracyUpgrade, CurrentWeapon.Weapon.AccuracyUpgradeMax, KWeapon.UpgradeColors[WU_ACCURACY]),
-                UpgradeEntry.Create(CurrentWeapon.Weapon.ReloadUpgrade, CurrentWeapon.Weapon.ReloadUpgradeMax, KWeapon.UpgradeColors[WU_RELOAD]),
-                UpgradeEntry.Create(CurrentWeapon.Weapon.ClipSizeUpgrade, CurrentWeapon.Weapon.ClipSizeUpgradeMax, KWeapon.UpgradeColors[WU_CLIPSIZE]),
-                UpgradeEntry.Create(CurrentWeapon.Weapon.ClipUseUpgrade, CurrentWeapon.Weapon.ClipUseUpgradeMax, KWeapon.UpgradeColors[WU_CLIPUSE]),
-                UpgradeEntry.Create(CurrentWeapon.Weapon.PelletUpgrade, CurrentWeapon.Weapon.PelletUpgradeMax, KWeapon.UpgradeColors[WU_PELLET])
+                UpgradeEntry.Create(ReadyWeapon.DamageUpgrade, ReadyWeapon.DamageUpgradeMax, KWeapon.UpgradeColors[WU_DAMAGE]),
+                UpgradeEntry.Create(ReadyWeapon.ROFUpgrade, ReadyWeapon.ROFUpgradeMax, KWeapon.UpgradeColors[WU_ROF]),
+                UpgradeEntry.Create(ReadyWeapon.AccuracyUpgrade, ReadyWeapon.AccuracyUpgradeMax, KWeapon.UpgradeColors[WU_ACCURACY]),
+                UpgradeEntry.Create(ReadyWeapon.PelletUpgrade, ReadyWeapon.PelletUpgradeMax, KWeapon.UpgradeColors[WU_PELLET])
             };
 
             int offset = 0;
             bool hasUpgrades = false;
 
-            DrawString(BigFont, ClipInterp.GetValue() .. "/" .. AmmoInterp.GetValue(), (-4, RightY), DI_TEXT_ALIGN_RIGHT, ammoColor);
+            DrawString(BigFont, FormatNumber(AmmoInterp.GetValue(), 3), (-4, RightY), DI_TEXT_ALIGN_RIGHT, Font.FindFontColor("White"));
 
             RightY -= RightOffset;
 
@@ -277,12 +260,6 @@ class KStatusBar : BaseStatusBar
 
             if (hasUpgrades)
                 RightY -= RightOffset;
-        }
-        else if (CPlayer.ReadyWeapon && CurrentWeapon.Ammo1)
-        {
-            DrawString(BigFont, FormatNumber(AmmoInterp.GetValue(), 3), (-4, RightY), DI_TEXT_ALIGN_RIGHT, ammoColor);
-
-            RightY -= RightOffset;
         }
     }
 
@@ -330,34 +307,6 @@ class KStatusBar : BaseStatusBar
         DrawString(SmallFont, FormatNumber(Player.Target.Health) .. "/" .. FormatNumber(Player.Target.SpawnHealth()), pos, DI_TEXT_ALIGN_CENTER | DI_SCREEN_HCENTER | DI_SCREEN_TOP, Font.FindFontColor("White"));
         DrawString(SmallFont, Player.Target.GetTag(), (pos.X, pos.Y + 8), DI_TEXT_ALIGN_CENTER | DI_SCREEN_HCENTER | DI_SCREEN_TOP, Font.FindFontColor("White"));
     }
-    
-    void GetCurrentWeapon()
-    {
-        Inventory ammo1, ammo2;
-        int amount1, amount2, clip;
-        Weapon weapon = CPlayer.ReadyWeapon;
-
-        [ammo1, ammo2, amount1, amount2] = GetCurrentAmmo();
-
-        if (weapon)
-        {
-            if (weapon is "KWeapon")
-            {
-                CurrentWeapon.Weapon = KWeapon(weapon);
-                CurrentWeapon.Clip = KWeapon(weapon).Clip[KWeapon(weapon).Type];
-            }
-            else
-            {
-                CurrentWeapon.Weapon = null;
-                CurrentWeapon.Clip = 0;
-            }
-
-            CurrentWeapon.Ammo1 = ammo1;
-            CurrentWeapon.Ammo2 = ammo2;
-            CurrentWeapon.Amount1 = amount1;
-            CurrentWeapon.Amount2 = amount2;
-        }
-    }
 
     Color GetArmorColor()
     {
@@ -377,24 +326,6 @@ class KStatusBar : BaseStatusBar
         return armorColor;
     }
 
-    Color GetAmmoColor()
-    {
-        Color ammoColor = Font.FindFontColor("White");
-        
-        if (CurrentWeapon.Ammo1)
-            for (int i = 0; i < Energy.Types.Size(); i++)
-            {
-                if (CurrentWeapon.Ammo1.GetClassName() == Energy.Types[i])
-                {
-                    ammoColor = Font.FindFontColor(Energy.Colors[i]);
-
-                    break;
-                }
-            }
-
-        return ammoColor;
-    }
-    
     Color, string GetEnemyElementColor(int element)
     {
         Color elementColor;

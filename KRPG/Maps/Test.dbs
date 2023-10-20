@@ -1,5 +1,5 @@
 type = "Doom Builder Map Settings Configuration";
-gameconfig = "GZDoom_KRPGUDMF.cfg";
+gameconfig = "GZDoom_DoomUDMF.cfg";
 strictpatches = 0;
 
 maps
@@ -14,7 +14,7 @@ maps
 			resource0
 			{
 				type = 1;
-				location = "C:\\GZDoom\\KRPG";
+				location = "F:\\GZKRPG\\KRPG";
 				option1 = 0;
 				option2 = 0;
 				notfortesting = 0;
@@ -39,8 +39,8 @@ maps
 		overridebrightness = false;
 		uselongtexturenames = true;
 		useresourcesinreadonlymode = false;
-		viewpositionx = -5.407916f;
-		viewpositiony = 116.7891f;
+		viewpositionx = -43.61546f;
+		viewpositiony = -31.52507f;
 		viewscale = 0.6499996f;
 		scriptcompiler = "zdoom_acs.cfg";
 		

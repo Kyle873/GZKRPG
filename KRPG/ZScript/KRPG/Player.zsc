@@ -44,15 +44,9 @@ class KPlayer : DoomPlayer
         Player.DamageScreenColor "White", 1.0, "Falling";
         Player.DamageScreenColor "Brown", 1.0, "Quake";
 
+        // Player.StartItem "KFist";
         Player.StartItem "KPistol";
-        Player.StartItem "KRedEnergy", 30;
-        Player.StartItem "KOrangeEnergy", 30;
-        Player.StartItem "KYellowEnergy", 30;
-        Player.StartItem "KGreenEnergy", 30;
-        Player.StartItem "KBlueEnergy", 30;
-        Player.StartItem "KPurpleEnergy", 30;
-        Player.StartItem "KWhiteEnergy", 30;
-        Player.StartItem "Fist";
+        Player.StartItem "KPistolAmmo", 100;
         
         +AimReflect;
     }

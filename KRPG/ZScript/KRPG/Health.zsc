@@ -6,8 +6,6 @@ class KHealth : HealthPickup
         Inventory.UseSound "items/health/use";
         
         HealthPickup.AutoUse 1;
-
-        +FloatBob;
     }
 }
 
@@ -16,16 +14,16 @@ class KTinyHealth : KHealth
     default
     {
 		//$Category "KRPG/Health"
-        Tag "Red Health Vial";
+        Tag "Tiny MedKit";
         Health 5;
         
-        Inventory.PickupMessage "Picked up a tiny health vial.";
+        Inventory.PickupMessage "Picked up a Tiny MedKit.";
     }
     
     states
     {
         Spawn:
-            VIAL A -1 bright;
+            MEDK A -1 bright;
             stop;
     }
 }
@@ -35,16 +33,16 @@ class KSmallHealth : KHealth
     default
     {
 		//$Category "KRPG/Health"
-        Tag "Green Health Vial";
+        Tag "Small MedKit";
         Health 20;
         
-        Inventory.PickupMessage "Picked up a small health vial.";
+        Inventory.PickupMessage "Picked up a Small MedKit.";
     }
     
     states
     {
         Spawn:
-            VIAL B -1 bright;
+            MEDK B -1 bright;
             stop;
     }
 }
@@ -54,16 +52,16 @@ class KMediumHealth : KHealth
     default
     {
 		//$Category "KRPG/Health"
-        Tag "Blue Health Vial";
+        Tag "Medium MedKit";
         Health 50;
         
-        Inventory.PickupMessage "Picked up a medium health vial.";
+        Inventory.PickupMessage "Picked up a Medium MedKit.";
     }
     
     states
     {
         Spawn:
-            VIAL C -1 bright;
+            MEDK C -1 bright;
             stop;
     }
 }
@@ -73,16 +71,16 @@ class KLargeHealth : KHealth
     default
     {
 		//$Category "KRPG/Health"
-        Tag "Gold Health Vial";
+        Tag "Large MedKit";
         Health 100;
         
-        Inventory.PickupMessage "Picked up a large health vial.";
+        Inventory.PickupMessage "Picked up a Large MedKit.";
     }
     
     states
     {
         Spawn:
-            VIAL D -1 bright;
-            stop;
+            MEDK DE 6 bright;
+            loop;
     }
 }

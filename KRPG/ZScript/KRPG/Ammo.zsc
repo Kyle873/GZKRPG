@@ -60,12 +60,12 @@ class KShotgunAmmo : Ammo
 
 		Inventory.PickupMessage "Picked up some shotgun ammo.";
 		Inventory.PickupSound "pickup/ammo";
-		Inventory.Amount 5;
-		Inventory.MaxAmount 50;
+		Inventory.Amount 2;
+		Inventory.MaxAmount 20;
 		Inventory.Icon "SAMOA0";
 
-		Ammo.BackpackAmount 5;
-		Ammo.BackpackMaxAmount 100;
+		Ammo.BackpackAmount 2;
+		Ammo.BackpackMaxAmount 40;
 	}
 
 	states
